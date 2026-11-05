@@ -1,0 +1,33 @@
+_notice: "© 1993–2026 Abhishek Choudhary. All rights reserved. AyeAI. SPDX-License-Identifier: CC0-1.0"
+identity:
+  id: exponential-decay.analyser
+  version: 0.1.0
+  title: Exponential decay on a differential analyser
+  description: >-
+    One integrator whose disc turns with time and whose integrand is x; its wheel drives x back through a
+    2:1 external gear pair, so d theta_x = -(1/2) theta_x d theta_t, which is dx/dt = -k x with k = 0.5.
+substrate: {id: mechanical, version: 0.1.0}
+model: {id: exponential-decay, version: 1.0.0, path: docs/vendor/subcore/0.1.0/spec/models/exponential-decay.yaml}
+kind: continuous
+shafts:
+  - {name: t, unit: rad, description: "independent variable (time), turned by the crank"}
+  - {name: w, unit: rad, description: "integrator wheel"}
+  - {name: x, unit: rad, description: "the decaying quantity, 10 rad per unit"}
+elements:
+  - {kind: crank, name: crank, shaft: t, rate: {value: 1.0, unit: rad/s}}
+  - {kind: integrator, name: i_x, disc: t, integrand: x, output: w, wheel_radius: {value: 0.001, unit: m}, screw_pitch: {value: 0.006283185307179587, unit: m}, travel: {value: 0.1, unit: m}}
+  - {kind: gear_pair, name: g_k, from: w, to: x, teeth: [20, 40], mesh: external, note: "-(20/40) = -k"}
+  - {kind: dial, name: dial_x, shaft: x}
+  - {kind: plotter, name: plot, x: t, y: x}
+initial:
+  - {shaft: x, value: 10.0, unit: rad, note: "x_0 = 1"}
+scales:
+  - {variable: t, shaft: t, factor: {value: 1.0, unit: rad/s}, model_unit: s}
+  - {variable: x, shaft: x, factor: {value: 10.0, unit: rad}, model_unit: "1"}
+parameters:
+  - {name: wheel_radius, value: 0.001, unit: m, applies_to: [integrators], evidence: {state: assumed, assumption: "working size of an integrator wheel, chosen with the screw pitch so that r / R_w equals the integrand shaft angle in radians"}}
+  - {name: screw_pitch, value: 0.006283185307179587, unit: m, applies_to: [integrators], evidence: {state: assumed, assumption: "2 pi R_w, so that one turn of the integrand shaft moves the wheel by 2 pi R_w"}}
+  - {name: carriage_travel, value: 0.1, unit: m, applies_to: [integrators], evidence: {state: sourced, citation: "subcore spec/substrates/mechanical.yaml, parameter carriage_travel (an assumed working value there); read here as total travel centred on the disc"}}
+  - {name: crank_rate, value: 1.0, unit: rad/s, applies_to: [crank], evidence: {state: assumed, assumption: "machine time scale: one radian of crank per second of model time; any rate below the slip and resonance limits gives the same ideal result"}}
+run: {t0: 0.0, t1: 10.0, unit: s, rk4_step: 0.01, rtol: 1.0e-10, atol: 1.0e-12}
+provenance: {source: "P10.1, P10.9; model exponential-decay 1.0.0 (CMS-03)", evidence: "gear ratio from the model parameter k = 0.5 exactly"}

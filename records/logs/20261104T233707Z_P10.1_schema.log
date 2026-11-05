@@ -1,0 +1,15 @@
+$ python3 tools/validate.py --json reports/results/p10_1_schema.json docs/programs/balanced-ternary.adder16.yaml docs/programs/balanced-ternary.adder32.yaml docs/programs/binary.adder32.yaml docs/programs/binary.adder64.yaml docs/programs/damped-driven-oscillator.analyser.yaml docs/programs/differential.yaml docs/programs/exponential-decay.analyser.yaml docs/programs/function-generation.cams.yaml docs/programs/gear-train.yaml docs/programs/harmonic-oscillator.analyser.yaml docs/programs/lorenz.analyser.yaml
+valid docs/programs/balanced-ternary.adder16.yaml
+valid docs/programs/balanced-ternary.adder32.yaml
+valid docs/programs/binary.adder32.yaml
+valid docs/programs/binary.adder64.yaml
+valid docs/programs/damped-driven-oscillator.analyser.yaml
+valid docs/programs/differential.yaml
+valid docs/programs/exponential-decay.analyser.yaml
+valid docs/programs/function-generation.cams.yaml
+valid docs/programs/gear-train.yaml
+valid docs/programs/harmonic-oscillator.analyser.yaml
+valid docs/programs/lorenz.analyser.yaml
+[validate] 11/11 valid against spec/schema/mechanism.schema.json (jsonschema 4.26.0, Draft 2020-12)
+
+[exit 0]

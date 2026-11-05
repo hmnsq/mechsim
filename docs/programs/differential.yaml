@@ -1,0 +1,27 @@
+_notice: "© 1993–2026 Abhishek Choudhary. All rights reserved. AyeAI. SPDX-License-Identifier: CC0-1.0"
+identity:
+  id: differential
+  version: 0.1.0
+  title: Differential with two cranks
+  description: >-
+    Two cranks turn the inputs a and b at different rates; the carrier c turns by (a + b)/2. A 1:1 external pair
+    reverses c into d. Used for T-41 (differential means), the Modelica generator and the Chrono script.
+substrate: {id: mechanical, version: 0.1.0}
+kind: continuous
+shafts:
+  - {name: a, unit: rad}
+  - {name: b, unit: rad}
+  - {name: c, unit: rad}
+  - {name: d, unit: rad}
+elements:
+  - {kind: crank, name: crank_a, shaft: a, rate: {value: 1.0, unit: rad/s}}
+  - {kind: crank, name: crank_b, shaft: b, rate: {value: -0.37, unit: rad/s}, phase: {value: 0.25, unit: rad}}
+  - {kind: differential, name: diff, a: a, b: b, carrier: c}
+  - {kind: gear_pair, name: g_rev, from: c, to: d, teeth: [24, 24], mesh: external}
+  - {kind: dial, name: dial_c, shaft: c}
+scales:
+  - {variable: t, shaft: a, factor: {value: 1.0, unit: rad/s}, model_unit: s}
+parameters:
+  - {name: crank_b_rate, value: -0.37, unit: rad/s, applies_to: [crank_b], evidence: {state: assumed, assumption: "an arbitrary second input rate"}}
+run: {t0: 0.0, t1: 10.0, unit: s, points: 100}
+provenance: {source: "P10.1, P10.2 (T-41), P10.7, P10.8"}

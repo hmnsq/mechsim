@@ -1,0 +1,12 @@
+_notice: "© 1993–2026 Abhishek Choudhary. All rights reserved. AyeAI. SPDX-License-Identifier: CC0-1.0"
+identity: {id: defect.wrong-unit, version: 0.1.0, title: "Planted defect: a lead screw pitch given as an angle"}
+substrate: {id: mechanical, version: 0.1.0}
+kind: continuous
+shafts:
+  - {name: a, unit: rad}
+  - {name: s, unit: m}
+elements:
+  - {kind: crank, name: crank, shaft: a, rate: {value: 1.0, unit: rad/s}}
+  - {kind: lead_screw, name: screw, shaft: a, slide: s, pitch: {value: 2.0, unit: deg}}
+run: {t0: 0.0, t1: 1.0, unit: s, points: 10}
+provenance: {source: "P10.1 planted defect (T-40)"}

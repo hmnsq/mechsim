@@ -1,0 +1,8 @@
+_notice: "© 1993–2026 Abhishek Choudhary. All rights reserved. AyeAI. SPDX-License-Identifier: CC0-1.0"
+representation: {kind: representation, id: balanced_ternary, version: 0.3.0, repository: hmnsq/repsynth}
+substrate: {id: mechanical, version: 0.1.0}
+mechanism: "counter wheels with three detent positions (-1, 0, +1) joined by carry pawls of -1, 0 or +1, set by setting levers (Guidelines 8.3)"
+programs: [balanced-ternary.adder16.yaml, balanced-ternary.adder32.yaml]
+capability_class: supported
+rung: SIMULATED
+evidence: {state: measured, record: "reports/results/p10_3_adders.json and the P10.3 adders run record in records/", note: "bt_add16: 4321/4321 vectors equal; bt_add32: 4321/4321 vectors equal. Simulated, not built (XSC-04): no physical claim."}

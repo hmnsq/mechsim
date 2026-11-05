@@ -1,0 +1,183 @@
+{
+  "_notice": "© 1993–2026 Abhishek Choudhary. All rights reserved. AyeAI. SPDX-License-Identifier: CC0-1.0",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hmnsq.github.io/mechsim/spec/schema/mechanism.schema.json",
+  "title": "Mechanism configuration (hmnsq/mechsim 0.1.0, P10.1)",
+  "description": "Shafts, elements and their connections, inputs (cranks, settings, setting levers) and outputs (dials, plotters) of a mechanical computing mechanism (MEC-01, Guidelines 8.1 and 8.2). The shape is fixed here; the meaning (connected shafts, consistent loops, determined shafts, initial conditions) is checked by docs/src/config.js.",
+  "type": "object",
+  "required": ["_notice", "identity", "substrate", "kind", "provenance"],
+  "additionalProperties": false,
+  "properties": {
+    "_notice": {"type": "string", "pattern": "^© 1993–2026 Abhishek Choudhary\\. All rights reserved\\. AyeAI\\. SPDX-License-Identifier: "},
+    "identity": {
+      "type": "object", "required": ["id", "version", "title"], "additionalProperties": false,
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9.-]*$"},
+        "version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+        "title": {"type": "string", "minLength": 1},
+        "description": {"type": "string"}
+      }
+    },
+    "substrate": {
+      "type": "object", "required": ["id", "version"], "additionalProperties": false,
+      "properties": {"id": {"const": "mechanical"}, "version": {"type": "string"}}
+    },
+    "model": {
+      "type": "object", "required": ["id", "version"], "additionalProperties": false,
+      "properties": {
+        "id": {"type": "string"}, "version": {"type": "string"},
+        "path": {"type": "string"}, "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "kind": {"enum": ["continuous", "function", "discrete"]},
+    "shafts": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/shaft"}},
+    "elements": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/element"}},
+    "registers": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/register"}},
+    "interface": {"$ref": "#/$defs/interface"},
+    "operation": {"$ref": "#/$defs/operation"},
+    "initial": {
+      "type": "array",
+      "items": {"type": "object", "required": ["shaft", "value", "unit"], "additionalProperties": false,
+        "properties": {"shaft": {"$ref": "#/$defs/name"}, "value": {"type": "number"}, "unit": {"type": "string"}, "note": {"type": "string"}}}
+    },
+    "scales": {
+      "type": "array",
+      "items": {"type": "object", "required": ["variable", "shaft", "factor"], "additionalProperties": false,
+        "properties": {
+          "variable": {"type": "string"}, "shaft": {"$ref": "#/$defs/name"}, "factor": {"$ref": "#/$defs/quantity"},
+          "model_unit": {"type": "string"}, "note": {"type": "string"}
+        }}
+    },
+    "parameters": {"type": "array", "items": {"$ref": "#/$defs/parameter"}},
+    "run": {
+      "type": "object", "required": ["t0", "t1", "unit"], "additionalProperties": false,
+      "properties": {
+        "t0": {"type": "number"}, "t1": {"type": "number"}, "unit": {"type": "string"},
+        "rk4_step": {"type": "number", "exclusiveMinimum": 0},
+        "rtol": {"type": "number", "exclusiveMinimum": 0}, "atol": {"type": "number", "exclusiveMinimum": 0},
+        "points": {"type": "integer", "minimum": 1}
+      }
+    },
+    "lumped": {"$ref": "#/$defs/lumped"},
+    "provenance": {
+      "type": "object", "required": ["source"], "additionalProperties": true,
+      "properties": {"source": {"type": "string"}, "evidence": {"type": "string"}}
+    }
+  },
+  "allOf": [
+    {"if": {"properties": {"kind": {"const": "discrete"}}}, "then": {"required": ["registers", "elements", "interface", "operation"]},
+     "else": {"required": ["shafts", "elements", "run"]}}
+  ],
+  "$defs": {
+    "name": {"type": "string", "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"},
+    "quantity": {"type": "object", "required": ["value", "unit"], "additionalProperties": false,
+      "properties": {"value": {"type": "number"}, "unit": {"type": "string", "minLength": 1}}},
+    "evidence": {
+      "type": "object", "required": ["state"],
+      "properties": {"state": {"enum": ["measured", "sourced", "assumed", "not_established"]}},
+      "allOf": [
+        {"if": {"properties": {"state": {"const": "measured"}}}, "then": {"required": ["record"]}},
+        {"if": {"properties": {"state": {"const": "sourced"}}}, "then": {"required": ["citation"]}},
+        {"if": {"properties": {"state": {"const": "assumed"}}}, "then": {"required": ["assumption"]}},
+        {"if": {"properties": {"state": {"const": "not_established"}}}, "then": {"required": ["reason"]}}
+      ]
+    },
+    "parameter": {
+      "type": "object", "required": ["name", "unit", "evidence"], "additionalProperties": false,
+      "properties": {
+        "name": {"$ref": "#/$defs/name"}, "value": {"type": "number"}, "unit": {"type": "string"},
+        "applies_to": {"type": "array", "items": {"type": "string"}}, "description": {"type": "string"},
+        "evidence": {"$ref": "#/$defs/evidence"}
+      },
+      "if": {"properties": {"evidence": {"properties": {"state": {"const": "not_established"}}}}},
+      "then": {"not": {"required": ["value"]}}, "else": {"required": ["value"]}
+    },
+    "shaft": {"type": "object", "required": ["name", "unit"], "additionalProperties": false,
+      "properties": {"name": {"$ref": "#/$defs/name"}, "unit": {"enum": ["rad", "m"]}, "description": {"type": "string"}}},
+    "element": {
+      "type": "object", "required": ["kind", "name"],
+      "properties": {"kind": {"type": "string"}, "name": {"$ref": "#/$defs/name"}},
+      "oneOf": [
+        {"$ref": "#/$defs/crank"}, {"$ref": "#/$defs/setting"}, {"$ref": "#/$defs/gear_pair"}, {"$ref": "#/$defs/differential"},
+        {"$ref": "#/$defs/lead_screw"}, {"$ref": "#/$defs/integrator"}, {"$ref": "#/$defs/cam"}, {"$ref": "#/$defs/ratchet"},
+        {"$ref": "#/$defs/counter_wheel"}, {"$ref": "#/$defs/dial"}, {"$ref": "#/$defs/plotter"},
+        {"$ref": "#/$defs/detent_wheels"}, {"$ref": "#/$defs/carry_pawls"}, {"$ref": "#/$defs/setting_levers"}, {"$ref": "#/$defs/ratchet_pawls"}
+      ]
+    },
+    "crank": {"type": "object", "required": ["kind", "name", "shaft", "rate"], "additionalProperties": false,
+      "properties": {"kind": {"const": "crank"}, "name": {"$ref": "#/$defs/name"}, "shaft": {"$ref": "#/$defs/name"},
+        "rate": {"$ref": "#/$defs/quantity"}, "phase": {"$ref": "#/$defs/quantity"}, "note": {"type": "string"}}},
+    "setting": {"type": "object", "required": ["kind", "name", "shaft", "value"], "additionalProperties": false,
+      "properties": {"kind": {"const": "setting"}, "name": {"$ref": "#/$defs/name"}, "shaft": {"$ref": "#/$defs/name"},
+        "value": {"$ref": "#/$defs/quantity"}, "note": {"type": "string"}}},
+    "gear_pair": {"type": "object", "required": ["kind", "name", "from", "to", "teeth", "mesh"], "additionalProperties": false,
+      "properties": {"kind": {"const": "gear_pair"}, "name": {"$ref": "#/$defs/name"}, "from": {"$ref": "#/$defs/name"}, "to": {"$ref": "#/$defs/name"},
+        "teeth": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "integer", "minimum": 1}},
+        "mesh": {"enum": ["external", "internal", "belt"]}, "module": {"$ref": "#/$defs/quantity"}, "note": {"type": "string"}}},
+    "differential": {"type": "object", "required": ["kind", "name", "a", "b", "carrier"], "additionalProperties": false,
+      "properties": {"kind": {"const": "differential"}, "name": {"$ref": "#/$defs/name"}, "a": {"$ref": "#/$defs/name"}, "b": {"$ref": "#/$defs/name"},
+        "carrier": {"$ref": "#/$defs/name"}, "note": {"type": "string"}}},
+    "lead_screw": {"type": "object", "required": ["kind", "name", "shaft", "slide", "pitch"], "additionalProperties": false,
+      "properties": {"kind": {"const": "lead_screw"}, "name": {"$ref": "#/$defs/name"}, "shaft": {"$ref": "#/$defs/name"}, "slide": {"$ref": "#/$defs/name"},
+        "pitch": {"$ref": "#/$defs/quantity"}, "note": {"type": "string"}}},
+    "integrator": {"type": "object", "required": ["kind", "name", "disc", "integrand", "output", "wheel_radius"], "additionalProperties": false,
+      "properties": {"kind": {"const": "integrator"}, "name": {"$ref": "#/$defs/name"}, "disc": {"$ref": "#/$defs/name"},
+        "integrand": {"$ref": "#/$defs/name"}, "output": {"$ref": "#/$defs/name"}, "wheel_radius": {"$ref": "#/$defs/quantity"},
+        "screw_pitch": {"$ref": "#/$defs/quantity"}, "travel": {"$ref": "#/$defs/quantity"}, "note": {"type": "string"}}},
+    "cam": {"type": "object", "required": ["kind", "name", "shaft", "follower", "table", "input_scale", "output_scale"], "additionalProperties": false,
+      "properties": {"kind": {"const": "cam"}, "name": {"$ref": "#/$defs/name"}, "shaft": {"$ref": "#/$defs/name"}, "follower": {"$ref": "#/$defs/name"},
+        "input_scale": {"$ref": "#/$defs/quantity"}, "output_scale": {"$ref": "#/$defs/quantity"}, "input_offset": {"$ref": "#/$defs/quantity"},
+        "table": {"type": "object", "required": ["from", "to"], "additionalProperties": false,
+          "properties": {"from": {"type": "number"}, "to": {"type": "number"}, "points": {"type": "integer", "minimum": 3},
+            "model": {"type": "string"}, "function": {"type": "string"}, "values": {"type": "array", "minItems": 3, "items": {"type": "number"}},
+            "vectors": {"type": "string", "description": "path of a table file relative to docs/programs"}},
+          "oneOf": [{"required": ["values"]}, {"required": ["vectors"]}, {"required": ["model", "function", "points"]}]},
+        "note": {"type": "string"}}},
+    "ratchet": {"type": "object", "required": ["kind", "name", "input", "output", "direction"], "additionalProperties": false,
+      "properties": {"kind": {"const": "ratchet"}, "name": {"$ref": "#/$defs/name"}, "input": {"$ref": "#/$defs/name"}, "output": {"$ref": "#/$defs/name"},
+        "direction": {"enum": ["forward", "reverse"]}, "note": {"type": "string"}}},
+    "counter_wheel": {"type": "object", "required": ["kind", "name", "shaft", "positions"], "additionalProperties": false,
+      "properties": {"kind": {"const": "counter_wheel"}, "name": {"$ref": "#/$defs/name"}, "shaft": {"$ref": "#/$defs/name"},
+        "positions": {"type": "integer", "minimum": 2}, "note": {"type": "string"}}},
+    "dial": {"type": "object", "required": ["kind", "name", "shaft"], "additionalProperties": false,
+      "properties": {"kind": {"const": "dial"}, "name": {"$ref": "#/$defs/name"}, "shaft": {"$ref": "#/$defs/name"}, "note": {"type": "string"}}},
+    "plotter": {"type": "object", "required": ["kind", "name", "x", "y"], "additionalProperties": false,
+      "properties": {"kind": {"const": "plotter"}, "name": {"$ref": "#/$defs/name"}, "x": {"$ref": "#/$defs/name"}, "y": {"$ref": "#/$defs/name"}, "note": {"type": "string"}}},
+    "register": {"type": "object", "required": ["name", "wheels", "digits"], "additionalProperties": false,
+      "properties": {"name": {"$ref": "#/$defs/name"}, "wheels": {"type": "integer", "minimum": 1},
+        "digits": {"type": "array", "minItems": 2, "items": {"type": "integer"}}, "role": {"enum": ["accumulator", "setting"]}, "note": {"type": "string"}}},
+    "detent_wheels": {"type": "object", "required": ["kind", "name", "register", "detent_positions"], "additionalProperties": false,
+      "properties": {"kind": {"const": "detent_wheels"}, "name": {"$ref": "#/$defs/name"}, "register": {"$ref": "#/$defs/name"},
+        "detent_positions": {"type": "integer", "minimum": 2}, "note": {"type": "string"}}},
+    "carry_pawls": {"type": "object", "required": ["kind", "name", "register", "overflow"], "additionalProperties": false,
+      "properties": {"kind": {"const": "carry_pawls"}, "name": {"$ref": "#/$defs/name"}, "register": {"$ref": "#/$defs/name"},
+        "overflow": {"const": "drop"}, "note": {"type": "string"}}},
+    "setting_levers": {"type": "object", "required": ["kind", "name", "register", "drives", "sense"], "additionalProperties": false,
+      "properties": {"kind": {"const": "setting_levers"}, "name": {"$ref": "#/$defs/name"}, "register": {"$ref": "#/$defs/name"},
+        "drives": {"$ref": "#/$defs/name"}, "sense": {"enum": ["add", "subtract"]}, "note": {"type": "string"}}},
+    "ratchet_pawls": {"type": "object", "required": ["kind", "name", "register"], "additionalProperties": false,
+      "properties": {"kind": {"const": "ratchet_pawls"}, "name": {"$ref": "#/$defs/name"}, "register": {"$ref": "#/$defs/name"}, "note": {"type": "string"}}},
+    "interface": {"type": "object", "required": ["encoding", "register_bits"], "additionalProperties": false,
+      "properties": {"encoding": {"enum": ["pair", "binary"]}, "register_bits": {"enum": [32, 64]},
+        "invalid_word": {"type": "string"}, "note": {"type": "string"}}},
+    "operation": {"type": "object", "required": ["op", "reference"], "additionalProperties": false,
+      "properties": {"op": {"const": "add"},
+        "reference": {"type": "object", "required": ["repository", "spec_id", "symbol", "vectors"], "additionalProperties": false,
+          "properties": {"repository": {"type": "string"}, "spec_id": {"type": "string"}, "symbol": {"type": "string"},
+            "header": {"type": "string"}, "vectors": {"type": "string"}}}}},
+    "lumped": {"type": "object", "additionalProperties": false,
+      "properties": {
+        "shafts": {"type": "array", "items": {"type": "object", "required": ["shaft", "inertia"], "additionalProperties": false,
+          "properties": {"shaft": {"$ref": "#/$defs/name"}, "inertia": {"type": "string"}, "viscous": {"type": "string"}, "coulomb": {"type": "string"}}}},
+        "meshes": {"type": "array", "items": {"type": "object", "required": ["element", "stiffness", "damping", "backlash"], "additionalProperties": false,
+          "properties": {"element": {"$ref": "#/$defs/name"}, "stiffness": {"type": "string"}, "damping": {"type": "string"}, "backlash": {"type": "string"}}}},
+        "integrators": {"type": "array", "items": {"type": "object", "required": ["element", "slip_torque", "contact_stiffness", "contact_damping"], "additionalProperties": false,
+          "properties": {"element": {"$ref": "#/$defs/name"}, "slip_torque": {"type": "string"}, "contact_stiffness": {"type": "string"}, "contact_damping": {"type": "string"}}}},
+        "drive": {"type": "object", "required": ["shaft", "kind"], "additionalProperties": false,
+          "properties": {"shaft": {"$ref": "#/$defs/name"}, "kind": {"enum": ["torque", "position"]}, "signal": {"enum": ["step", "sine", "ramp", "triangle"]},
+            "amplitude": {"type": "string"}, "frequency": {"type": "string"}, "period": {"type": "string"}, "stiffness": {"type": "string"}, "damping": {"type": "string"}}},
+        "load": {"type": "object", "required": ["shaft", "torque"], "additionalProperties": false,
+          "properties": {"shaft": {"$ref": "#/$defs/name"}, "torque": {"type": "string"}}}
+      }}
+  }
+}

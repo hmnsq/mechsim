@@ -1,0 +1,27 @@
+_notice: "© 1993–2026 Abhishek Choudhary. All rights reserved. AyeAI. SPDX-License-Identifier: CC0-1.0"
+identity:
+  id: binary.adder64
+  version: 0.1.0
+  title: Mechanical binary adder, 64 bits
+  description: >-
+    An accumulator of 64 detent wheels with 2 positions each ([0, 1]), joined by carry pawls; setting levers turn
+    each wheel by the digit of the second word, one detent step at a time, while the carries ripple. The carry
+    out of the last wheel leaves the register (wrap modulo the register).
+substrate: {id: mechanical, version: 0.1.0}
+kind: discrete
+registers:
+  - {name: accumulator, wheels: 64, digits: [0, 1], role: accumulator}
+  - {name: addend, wheels: 64, digits: [0, 1], role: setting}
+elements:
+  - {kind: detent_wheels, name: wheels, register: accumulator, detent_positions: 2}
+  - {kind: carry_pawls, name: carries, register: accumulator, overflow: drop}
+  - {kind: setting_levers, name: levers, register: addend, drives: accumulator, sense: add}
+  - {kind: ratchet_pawls, name: ratchets, register: accumulator, note: "binary wheels only ever step forward"}
+interface:
+  encoding: binary
+  register_bits: 64
+  invalid_word: "none: every bit pattern is a word"
+operation:
+  op: add
+  reference: {repository: hmnsq/repsynth, spec_id: binary_integer, symbol: bin_add64, header: spec/ref/binary_integer/binary_integer.h, vectors: conformance/vectors/binary_integer/add.64.vec}
+provenance: {source: "P10.3 (MEC-03); Guidelines 8.3; reference function bin_add64 of binary_integer 0.3.0 (SPC-03)"}

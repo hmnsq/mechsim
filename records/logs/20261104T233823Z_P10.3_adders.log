@@ -1,0 +1,28 @@
+$ node tests/p10_3_adders.test.mjs
+PASS C reference functions compiled from repsynth - repsynth/spec/ref/balanced_ternary/balanced_ternary.c 8af9eb34d1f75f7d, repsynth/spec/ref/binary_integer/binary_integer.c 24f112818fa66e79
+PASS program balanced-ternary.adder16.yaml valid - []
+PASS balanced-ternary.adder16.yaml vector header names balanced_ternary add width 16 - repsynth/conformance/vectors/balanced_ternary/add.16.vec: spec balanced_ternary 0.3.0, width 16 (32-bit register), 4321 cases
+PASS T-43 balanced-ternary.adder16.yaml: equal to bt_add16 on every vector - 4321/4321 equal; 4240 through the wheels (65746 detent steps, 20707 carries, 1373 overflows), 81 with a code that names no detent position (levers jam; interface returns the invalid word)
+PASS T-43 balanced-ternary.adder16.yaml: equal to compiled bt_add16 on 20000 seeded cases - 20000/20000, seed 0x6d656368+16
+PASS program balanced-ternary.adder32.yaml valid - []
+PASS balanced-ternary.adder32.yaml vector header names balanced_ternary add width 32 - repsynth/conformance/vectors/balanced_ternary/add.32.vec: spec balanced_ternary 0.3.0, width 32 (64-bit register), 4321 cases
+PASS T-43 balanced-ternary.adder32.yaml: equal to bt_add32 on every vector - 4321/4321 equal; 4240 through the wheels (132588 detent steps, 42914 carries, 1453 overflows), 81 with a code that names no detent position (levers jam; interface returns the invalid word)
+PASS T-43 balanced-ternary.adder32.yaml: equal to compiled bt_add32 on 20000 seeded cases - 20000/20000, seed 0x6d656368+32
+PASS program binary.adder32.yaml valid - []
+PASS binary.adder32.yaml vector header names binary_integer add width 32 - repsynth/conformance/vectors/binary_integer/add.32.vec: spec binary_integer 0.3.0, width 32 (32-bit register), 4196 cases
+PASS T-43 binary.adder32.yaml: equal to bin_add32 on every vector - 4196/4196 equal; 4196 through the wheels (128997 detent steps, 62423 carries, 2128 overflows), 0 with a code that names no detent position (levers jam; interface returns the invalid word)
+PASS T-43 binary.adder32.yaml: equal to compiled bin_add32 on 20000 seeded cases - 20000/20000, seed 0x6d656368+32
+PASS program binary.adder64.yaml valid - []
+PASS binary.adder64.yaml vector header names binary_integer add width 64 - repsynth/conformance/vectors/binary_integer/add.64.vec: spec binary_integer 0.3.0, width 64 (64-bit register), 4196 cases
+PASS T-43 binary.adder64.yaml: equal to bin_add64 on every vector - 4196/4196 equal; 4196 through the wheels (263007 detent steps, 129815 carries, 2129 overflows), 0 with a code that names no detent position (levers jam; interface returns the invalid word)
+PASS T-43 binary.adder64.yaml: equal to compiled bin_add64 on 20000 seeded cases - 20000/20000, seed 0x6d656368+64
+PASS ternary detent: +1 plus +1 gives -1 with a carry of +1
+PASS ternary detent: -1 plus -1 gives +1 with a carry of -1
+PASS ternary detent: 0 plus +1 gives +1 with no carry
+PASS binary register: 1111 plus 1 ripples three carries and one overflow - wheels 0000, carries 3, overflows 1
+PASS binary register: the ratchet pawl blocks a backward step
+PASS 3-trit register exhaustive: 729 sums equal integer addition modulo 27 in the balanced range - 729/729
+PASS continuous ratchet: output never turns back, and gains exactly the forward travel of x (20 rad over one period) - r(T) = 19.999999999999954
+[p10_3_adders] 24/24 checks pass
+
+[exit 0]

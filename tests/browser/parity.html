@@ -1,0 +1,33 @@
+<!doctype html>
+<!-- © 1993–2026 Abhishek Choudhary. All rights reserved. AyeAI. SPDX-License-Identifier: GPL-3.0-or-later -->
+<html lang="en"><head><meta charset="utf-8"><title>mechsim parity</title></head>
+<body>
+<pre id="log"></pre>
+<script type="module">
+// Runs the same programs as tests/p10_2_parity.test.mjs, in the browser, through the same command surface
+// (docs/src/api.js), and publishes each trace's sha256 on window.__parity.
+import { run, modelsFromTexts, referencedFiles } from '../../docs/src/api.js';
+const q = new URLSearchParams(location.search);
+const programs = q.get('programs').split(',');
+const modelFiles = q.get('models').split(',');
+const log = (s) => { document.getElementById('log').textContent += s + '\n'; };
+const text = async (p) => { const r = await fetch(p); if (!r.ok) throw new Error(`${p}: ${r.status}`); return r.text(); };
+try {
+  const models = modelsFromTexts(await Promise.all(modelFiles.map((f) => text(`../../docs/vendor/subcore/0.1.0/spec/models/${f}`))));
+  const out = {};
+  for (const p of programs) {
+    const t0 = performance.now();
+    const src = await text(`../../docs/programs/${p}`);
+    const files = {};
+    for (const f of referencedFiles(src)) files[f] = await text(`../../docs/programs/${f}`);
+    const r = run(src, models, { solver: 'rk4' }, files);
+    out[p] = { sha256: r.sha256, bytes: r.trace.length, ms: performance.now() - t0 };
+    log(`${p} ${r.sha256}`);
+  }
+  window.__parity = { ok: true, results: out, userAgent: navigator.userAgent };
+} catch (e) {
+  window.__parity = { ok: false, error: String(e && e.stack || e) };
+  log(String(e));
+}
+</script>
+</body></html>

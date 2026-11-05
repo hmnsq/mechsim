@@ -1,0 +1,67 @@
+_notice: "© 1993–2026 Abhishek Choudhary. All rights reserved. AyeAI. SPDX-License-Identifier: CC0-1.0"
+identity:
+  id: damped-driven-oscillator.analyser
+  version: 0.1.0
+  title: Damped driven oscillator on a differential analyser
+  description: >-
+    The drive F cos(omega_d t) comes from a second loop of two integrators (c' = -omega_d s, s' = omega_d c).
+    The acceleration v' = -2 zeta omega v - omega^2 x + F c is summed by two differentials from three
+    integrator wheels, each scaled by a gear pair: -1/5, -1 and +1/2, and the factors of 2 the differentials
+    halve are restored by 2:1 gears.
+substrate: {id: mechanical, version: 0.1.0}
+model: {id: damped-driven-oscillator, version: 1.0.0, path: docs/vendor/subcore/0.1.0/spec/models/damped-driven-oscillator.yaml}
+kind: continuous
+shafts:
+  - {name: t, unit: rad, description: "time"}
+  - {name: x, unit: rad, description: "displacement, 10 rad per metre"}
+  - {name: v, unit: rad, description: "velocity, 10 rad per metre per second"}
+  - {name: c, unit: rad, description: "10 cos(omega_d t)"}
+  - {name: s, unit: rad, description: "10 sin(omega_d t)"}
+  - {name: w_c, unit: rad}
+  - {name: w_s, unit: rad}
+  - {name: w_vv, unit: rad, description: "integral of v"}
+  - {name: w_vx, unit: rad, description: "integral of x"}
+  - {name: w_vc, unit: rad, description: "integral of c"}
+  - {name: a, unit: rad, description: "-2 zeta omega times the integral of v"}
+  - {name: b, unit: rad, description: "-omega^2 times the integral of x"}
+  - {name: e, unit: rad, description: "F (per unit of c) times the integral of c"}
+  - {name: m1, unit: rad, description: "(a + b)/2"}
+  - {name: g1, unit: rad, description: "a + b"}
+  - {name: m2, unit: rad, description: "(a + b + e)/2"}
+elements:
+  - {kind: crank, name: crank, shaft: t, rate: {value: 1.0, unit: rad/s}}
+  - {kind: integrator, name: i_c, disc: t, integrand: s, output: w_c, wheel_radius: {value: 0.001, unit: m}, screw_pitch: {value: 0.006283185307179587, unit: m}, travel: {value: 0.1, unit: m}}
+  - {kind: gear_pair, name: g_c, from: w_c, to: c, teeth: [4, 5], mesh: external, note: "-omega_d = -0.8"}
+  - {kind: integrator, name: i_s, disc: t, integrand: c, output: w_s, wheel_radius: {value: 0.001, unit: m}, screw_pitch: {value: 0.006283185307179587, unit: m}, travel: {value: 0.1, unit: m}}
+  - {kind: gear_pair, name: g_s, from: w_s, to: s, teeth: [4, 5], mesh: internal, note: "+omega_d = 0.8"}
+  - {kind: integrator, name: i_x, disc: t, integrand: v, output: x, wheel_radius: {value: 0.001, unit: m}, screw_pitch: {value: 0.006283185307179587, unit: m}, travel: {value: 0.1, unit: m}}
+  - {kind: integrator, name: i_vv, disc: t, integrand: v, output: w_vv, wheel_radius: {value: 0.001, unit: m}, screw_pitch: {value: 0.006283185307179587, unit: m}, travel: {value: 0.1, unit: m}}
+  - {kind: integrator, name: i_vx, disc: t, integrand: x, output: w_vx, wheel_radius: {value: 0.001, unit: m}, screw_pitch: {value: 0.006283185307179587, unit: m}, travel: {value: 0.1, unit: m}}
+  - {kind: integrator, name: i_vc, disc: t, integrand: c, output: w_vc, wheel_radius: {value: 0.001, unit: m}, screw_pitch: {value: 0.006283185307179587, unit: m}, travel: {value: 0.1, unit: m}}
+  - {kind: gear_pair, name: g_a, from: w_vv, to: a, teeth: [12, 60], mesh: external, note: "-2 zeta omega = -0.2"}
+  - {kind: gear_pair, name: g_b, from: w_vx, to: b, teeth: [30, 30], mesh: external, note: "-omega^2 = -1"}
+  - {kind: gear_pair, name: g_e, from: w_vc, to: e, teeth: [20, 40], mesh: internal, note: "F = 0.5 per unit of c"}
+  - {kind: differential, name: d_1, a: a, b: b, carrier: m1}
+  - {kind: gear_pair, name: g_1, from: m1, to: g1, teeth: [40, 20], mesh: internal, note: "x2"}
+  - {kind: differential, name: d_2, a: g1, b: e, carrier: m2}
+  - {kind: gear_pair, name: g_2, from: m2, to: v, teeth: [40, 20], mesh: internal, note: "x2"}
+  - {kind: dial, name: dial_x, shaft: x}
+  - {kind: plotter, name: plot, x: t, y: x}
+initial:
+  - {shaft: x, value: 10.0, unit: rad, note: "x_0 = 1 m"}
+  - {shaft: c, value: 10.0, unit: rad, note: "cos 0 = 1"}
+  - {shaft: s, value: 0.0, unit: rad}
+  - {shaft: w_vv, value: 0.0, unit: rad}
+  - {shaft: w_vx, value: 0.0, unit: rad}
+  - {shaft: w_vc, value: 0.0, unit: rad, note: "with the two above, v_0 = 0"}
+scales:
+  - {variable: t, shaft: t, factor: {value: 1.0, unit: rad/s}, model_unit: s}
+  - {variable: x, shaft: x, factor: {value: 10.0, unit: rad/m}, model_unit: m}
+  - {variable: v, shaft: v, factor: {value: 10.0, unit: rad.s/m}, model_unit: m/s}
+parameters:
+  - {name: wheel_radius, value: 0.001, unit: m, applies_to: [integrators], evidence: {state: assumed, assumption: "working size of an integrator wheel, chosen with the screw pitch so that r / R_w equals the integrand shaft angle in radians"}}
+  - {name: screw_pitch, value: 0.006283185307179587, unit: m, applies_to: [integrators], evidence: {state: assumed, assumption: "2 pi R_w, so that one turn of the integrand shaft moves the wheel by 2 pi R_w"}}
+  - {name: carriage_travel, value: 0.1, unit: m, applies_to: [integrators], evidence: {state: sourced, citation: "subcore spec/substrates/mechanical.yaml, parameter carriage_travel (an assumed working value there); read here as total travel centred on the disc"}}
+  - {name: crank_rate, value: 1.0, unit: rad/s, applies_to: [crank], evidence: {state: assumed, assumption: "machine time scale: one radian of crank per second of model time; any rate below the slip and resonance limits gives the same ideal result"}}
+run: {t0: 0.0, t1: 30.0, unit: s, rk4_step: 0.01, rtol: 1.0e-10, atol: 1.0e-12}
+provenance: {source: "P10.1, P10.9; model damped-driven-oscillator 1.0.0 (CMS-03)", evidence: "gear ratios from zeta = 0.1, omega = 1, F = 0.5, omega_d = 0.8 exactly"}

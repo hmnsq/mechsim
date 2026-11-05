@@ -1,0 +1,8 @@
+_notice: "© 1993–2026 Abhishek Choudhary. All rights reserved. AyeAI. SPDX-License-Identifier: CC0-1.0"
+representation: {kind: representation, id: binary_integer, version: 0.3.0, repository: hmnsq/repsynth}
+substrate: {id: mechanical, version: 0.1.0}
+mechanism: "counter wheels with two detent positions (0, 1) joined by carry pawls, held by ratchet pawls, set by setting levers"
+programs: [binary.adder32.yaml, binary.adder64.yaml]
+capability_class: supported
+rung: SIMULATED
+evidence: {state: measured, record: "reports/results/p10_3_adders.json and the P10.3 adders run record in records/", note: "bin_add32: 4196/4196 vectors equal; bin_add64: 4196/4196 vectors equal. Simulated, not built (XSC-04): no physical claim."}

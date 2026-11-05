@@ -1,0 +1,160 @@
+{
+ "_notice": "© 1993–2026 Abhishek Choudhary. All rights reserved. AyeAI. SPDX-License-Identifier: CC0-1.0",
+ "suite": "p10_2_parity",
+ "checks": 22,
+ "passed": 22,
+ "failed": [],
+ "node": "v24.20.0",
+ "engines": {
+  "chromium": {
+   "launched": true,
+   "version": "153.0.8010.12",
+   "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+   "ok": true,
+   "errors": []
+  },
+  "firefox": {
+   "launched": true,
+   "version": "155.0",
+   "userAgent": "Mozilla/5.0 (X11; Linux x86_64; rv:155.0) Gecko/20100101 Firefox/155.0",
+   "ok": true,
+   "errors": []
+  },
+  "webkit": {
+   "launched": true,
+   "version": "26.6",
+   "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6 Safari/605.1.15",
+   "ok": true,
+   "errors": []
+  }
+ },
+ "programs": [
+  "damped-driven-oscillator.analyser.yaml",
+  "differential.yaml",
+  "exponential-decay.analyser.yaml",
+  "function-generation.cams.yaml",
+  "gear-train.yaml",
+  "harmonic-oscillator.analyser.yaml",
+  "lorenz.analyser.yaml"
+ ],
+ "node_sha256": {
+  "damped-driven-oscillator.analyser.yaml": "f256673d1ad3bd418150fe496f76a14da8217c787f71934b205a83abcf5d7e09",
+  "differential.yaml": "c8791f26139b4a01aff465bb0357af291da6c21bb67b92c438a7f0695289abb5",
+  "exponential-decay.analyser.yaml": "08370c735a4771147e140c880aefa40344709ec2ed5c8baedcb2781cc4b81f12",
+  "function-generation.cams.yaml": "c35a2e3af4db7db6d49d89afea5ace0debac671f613535a0e105c43904db0cab",
+  "gear-train.yaml": "3cf7359a6ffcd54242d71330854e102a771aa61ceb8a29a3bb4477becd7a29fe",
+  "harmonic-oscillator.analyser.yaml": "66000f7c385dc9a3f9eb46c577a13b171d383a907a9ac2465f4d1b89d5fe279e",
+  "lorenz.analyser.yaml": "845f7871c93668052a85fad6ddbc5ce5b392bcd8e75ca955dcd42d2fd0bb93f4"
+ },
+ "details": [
+  {
+   "id": "chromium byte-identical trace damped-driven-oscillator.analyser.yaml",
+   "ok": true,
+   "note": "f256673d1ad3bd41 vs node f256673d1ad3bd41, 143 ms"
+  },
+  {
+   "id": "chromium byte-identical trace differential.yaml",
+   "ok": true,
+   "note": "c8791f26139b4a01 vs node c8791f26139b4a01, 13 ms"
+  },
+  {
+   "id": "chromium byte-identical trace exponential-decay.analyser.yaml",
+   "ok": true,
+   "note": "08370c735a477114 vs node 08370c735a477114, 34 ms"
+  },
+  {
+   "id": "chromium byte-identical trace function-generation.cams.yaml",
+   "ok": true,
+   "note": "c35a2e3af4db7db6 vs node c35a2e3af4db7db6, 65 ms"
+  },
+  {
+   "id": "chromium byte-identical trace gear-train.yaml",
+   "ok": true,
+   "note": "3cf7359a6ffcd542 vs node 3cf7359a6ffcd542, 17 ms"
+  },
+  {
+   "id": "chromium byte-identical trace harmonic-oscillator.analyser.yaml",
+   "ok": true,
+   "note": "66000f7c385dc9a3 vs node 66000f7c385dc9a3, 49 ms"
+  },
+  {
+   "id": "chromium byte-identical trace lorenz.analyser.yaml",
+   "ok": true,
+   "note": "845f7871c9366805 vs node 845f7871c9366805, 201 ms"
+  },
+  {
+   "id": "firefox trace damped-driven-oscillator.analyser.yaml (cross-engine bound)",
+   "ok": true,
+   "note": "identical"
+  },
+  {
+   "id": "firefox trace differential.yaml (cross-engine bound)",
+   "ok": true,
+   "note": "identical"
+  },
+  {
+   "id": "firefox trace exponential-decay.analyser.yaml (cross-engine bound)",
+   "ok": true,
+   "note": "identical"
+  },
+  {
+   "id": "firefox trace function-generation.cams.yaml (cross-engine bound)",
+   "ok": true,
+   "note": "identical"
+  },
+  {
+   "id": "firefox trace gear-train.yaml (cross-engine bound)",
+   "ok": true,
+   "note": "identical"
+  },
+  {
+   "id": "firefox trace harmonic-oscillator.analyser.yaml (cross-engine bound)",
+   "ok": true,
+   "note": "identical"
+  },
+  {
+   "id": "firefox trace lorenz.analyser.yaml (cross-engine bound)",
+   "ok": true,
+   "note": "identical"
+  },
+  {
+   "id": "webkit trace damped-driven-oscillator.analyser.yaml (cross-engine bound)",
+   "ok": true,
+   "note": "identical"
+  },
+  {
+   "id": "webkit trace differential.yaml (cross-engine bound)",
+   "ok": true,
+   "note": "identical"
+  },
+  {
+   "id": "webkit trace exponential-decay.analyser.yaml (cross-engine bound)",
+   "ok": true,
+   "note": "identical"
+  },
+  {
+   "id": "webkit trace function-generation.cams.yaml (cross-engine bound)",
+   "ok": true,
+   "note": "identical"
+  },
+  {
+   "id": "webkit trace gear-train.yaml (cross-engine bound)",
+   "ok": true,
+   "note": "identical"
+  },
+  {
+   "id": "webkit trace harmonic-oscillator.analyser.yaml (cross-engine bound)",
+   "ok": true,
+   "note": "identical"
+  },
+  {
+   "id": "webkit trace lorenz.analyser.yaml (cross-engine bound)",
+   "ok": true,
+   "note": "identical"
+  },
+  {
+   "id": "chromium was available and ran",
+   "ok": true
+  }
+ ]
+}

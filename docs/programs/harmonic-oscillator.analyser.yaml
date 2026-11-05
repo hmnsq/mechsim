@@ -1,0 +1,38 @@
+_notice: "© 1993–2026 Abhishek Choudhary. All rights reserved. AyeAI. SPDX-License-Identifier: CC0-1.0"
+identity:
+  id: harmonic-oscillator.analyser
+  version: 0.1.0
+  title: Harmonic oscillator on a differential analyser
+  description: >-
+    Two integrators in a loop (Guidelines 8.2). The first integrates v into x; the second integrates x, and its
+    wheel drives v through a 4:1 external gear pair, so dv = -omega^2 x dt with omega = 2.
+substrate: {id: mechanical, version: 0.1.0}
+model: {id: harmonic-oscillator, version: 1.0.0, path: docs/vendor/subcore/0.1.0/spec/models/harmonic-oscillator.yaml}
+kind: continuous
+shafts:
+  - {name: t, unit: rad, description: "time"}
+  - {name: x, unit: rad, description: "displacement, 10 rad per metre"}
+  - {name: v, unit: rad, description: "velocity, 10 rad per metre per second"}
+  - {name: w_v, unit: rad, description: "wheel of the second integrator"}
+elements:
+  - {kind: crank, name: crank, shaft: t, rate: {value: 1.0, unit: rad/s}}
+  - {kind: integrator, name: i_x, disc: t, integrand: v, output: x, wheel_radius: {value: 0.001, unit: m}, screw_pitch: {value: 0.006283185307179587, unit: m}, travel: {value: 0.1, unit: m}}
+  - {kind: integrator, name: i_v, disc: t, integrand: x, output: w_v, wheel_radius: {value: 0.001, unit: m}, screw_pitch: {value: 0.006283185307179587, unit: m}, travel: {value: 0.1, unit: m}}
+  - {kind: gear_pair, name: g_omega2, from: w_v, to: v, teeth: [80, 20], mesh: external, note: "-(80/20) = -omega^2"}
+  - {kind: dial, name: dial_x, shaft: x}
+  - {kind: dial, name: dial_v, shaft: v}
+  - {kind: plotter, name: plot, x: t, y: x}
+initial:
+  - {shaft: x, value: 10.0, unit: rad, note: "x_0 = 1 m"}
+  - {shaft: v, value: 0.0, unit: rad, note: "v_0 = 0"}
+scales:
+  - {variable: t, shaft: t, factor: {value: 1.0, unit: rad/s}, model_unit: s}
+  - {variable: x, shaft: x, factor: {value: 10.0, unit: rad/m}, model_unit: m}
+  - {variable: v, shaft: v, factor: {value: 10.0, unit: rad.s/m}, model_unit: m/s}
+parameters:
+  - {name: wheel_radius, value: 0.001, unit: m, applies_to: [integrators], evidence: {state: assumed, assumption: "working size of an integrator wheel, chosen with the screw pitch so that r / R_w equals the integrand shaft angle in radians"}}
+  - {name: screw_pitch, value: 0.006283185307179587, unit: m, applies_to: [integrators], evidence: {state: assumed, assumption: "2 pi R_w, so that one turn of the integrand shaft moves the wheel by 2 pi R_w"}}
+  - {name: carriage_travel, value: 0.1, unit: m, applies_to: [integrators], evidence: {state: sourced, citation: "subcore spec/substrates/mechanical.yaml, parameter carriage_travel (an assumed working value there); read here as total travel centred on the disc"}}
+  - {name: crank_rate, value: 1.0, unit: rad/s, applies_to: [crank], evidence: {state: assumed, assumption: "machine time scale: one radian of crank per second of model time; any rate below the slip and resonance limits gives the same ideal result"}}
+run: {t0: 0.0, t1: 20.0, unit: s, rk4_step: 0.01, rtol: 1.0e-10, atol: 1.0e-12}
+provenance: {source: "P10.1, P10.9; model harmonic-oscillator 1.0.0 (CMS-03); Guidelines 8.2", evidence: "gear ratio from omega = 2 exactly"}

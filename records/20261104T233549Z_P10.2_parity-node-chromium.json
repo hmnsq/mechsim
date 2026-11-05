@@ -1,0 +1,104 @@
+{
+ "packet": "P10.2",
+ "step": "parity-node-chromium",
+ "command": "node tests/p10_2_parity.test.mjs",
+ "exit_code": 1,
+ "started_utc": "2026-11-04T23:35:49.161Z",
+ "finished_utc": "2026-11-04T23:35:54.033Z",
+ "inputs": {},
+ "outputs": {
+  "records/logs/20261104T233549Z_P10.2_parity-node-chromium.log": "cb5227a1e0b7b2b65b75eb2616979bbd59cdc8fdd336e6a00c2bf5f781d86ada"
+ },
+ "tool_versions": {
+  "node": "v22.23.4"
+ },
+ "image_digests": {},
+ "results": {
+  "_notice": "© 1993–2026 Abhishek Choudhary. All rights reserved. AyeAI. SPDX-License-Identifier: CC0-1.0",
+  "suite": "p10_2_parity",
+  "checks": 8,
+  "passed": 7,
+  "failed": [
+   "chromium byte-identical trace function-generation.cams.yaml"
+  ],
+  "node": "v22.23.4",
+  "engines": {
+   "chromium": {
+    "launched": true,
+    "version": "153.0.8010.12",
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+    "ok": true,
+    "errors": []
+   },
+   "firefox": {
+    "launched": false,
+    "reason": "browserType.launch: Executable doesn't exist at /opt/pw-browsers/firefox-1543/firefox/firefox"
+   },
+   "webkit": {
+    "launched": false,
+    "reason": "browserType.launch: Executable doesn't exist at /opt/pw-browsers/webkit-2359/pw_run.sh"
+   }
+  },
+  "programs": [
+   "damped-driven-oscillator.analyser.yaml",
+   "differential.yaml",
+   "exponential-decay.analyser.yaml",
+   "function-generation.cams.yaml",
+   "gear-train.yaml",
+   "harmonic-oscillator.analyser.yaml",
+   "lorenz.analyser.yaml"
+  ],
+  "node_sha256": {
+   "damped-driven-oscillator.analyser.yaml": "f256673d1ad3bd418150fe496f76a14da8217c787f71934b205a83abcf5d7e09",
+   "differential.yaml": "c8791f26139b4a01aff465bb0357af291da6c21bb67b92c438a7f0695289abb5",
+   "exponential-decay.analyser.yaml": "08370c735a4771147e140c880aefa40344709ec2ed5c8baedcb2781cc4b81f12",
+   "function-generation.cams.yaml": "118a32f5654c45e1750e3f3d4b00f7544369754f71554ea752bf6257d5dd86a8",
+   "gear-train.yaml": "3cf7359a6ffcd54242d71330854e102a771aa61ceb8a29a3bb4477becd7a29fe",
+   "harmonic-oscillator.analyser.yaml": "66000f7c385dc9a3f9eb46c577a13b171d383a907a9ac2465f4d1b89d5fe279e",
+   "lorenz.analyser.yaml": "845f7871c93668052a85fad6ddbc5ce5b392bcd8e75ca955dcd42d2fd0bb93f4"
+  },
+  "details": [
+   {
+    "id": "chromium byte-identical trace damped-driven-oscillator.analyser.yaml",
+    "ok": true,
+    "note": "f256673d1ad3bd41 vs node f256673d1ad3bd41, 126 ms"
+   },
+   {
+    "id": "chromium byte-identical trace differential.yaml",
+    "ok": true,
+    "note": "c8791f26139b4a01 vs node c8791f26139b4a01, 19 ms"
+   },
+   {
+    "id": "chromium byte-identical trace exponential-decay.analyser.yaml",
+    "ok": true,
+    "note": "08370c735a477114 vs node 08370c735a477114, 43 ms"
+   },
+   {
+    "id": "chromium byte-identical trace function-generation.cams.yaml",
+    "ok": false,
+    "note": "d5990c715d3d56d5 vs node 118a32f5654c45e1, 22 ms"
+   },
+   {
+    "id": "chromium byte-identical trace gear-train.yaml",
+    "ok": true,
+    "note": "3cf7359a6ffcd542 vs node 3cf7359a6ffcd542, 39 ms"
+   },
+   {
+    "id": "chromium byte-identical trace harmonic-oscillator.analyser.yaml",
+    "ok": true,
+    "note": "66000f7c385dc9a3 vs node 66000f7c385dc9a3, 50 ms"
+   },
+   {
+    "id": "chromium byte-identical trace lorenz.analyser.yaml",
+    "ok": true,
+    "note": "845f7871c9366805 vs node 845f7871c9366805, 440 ms"
+   },
+   {
+    "id": "chromium was available and ran",
+    "ok": true
+   }
+  ]
+ },
+ "state": "failed",
+ "notes": "First parity run: function-generation differs because its cam tables were evaluated with Math.sin/exp/log, which differ in the last bit between Node 22.23.4 (V8 12.4) and Chromium 153 (35 sin, 109 exp, 84 log of 1001 points; probe .cache/tmp/fn.mjs). Shown failing before the fix. log: records/logs/20261104T233549Z_P10.2_parity-node-chromium.log"
+}

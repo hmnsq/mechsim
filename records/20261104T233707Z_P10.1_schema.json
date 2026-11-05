@@ -1,0 +1,20 @@
+{
+ "packet": "P10.1",
+ "step": "schema",
+ "command": "python3 tools/validate.py --json reports/results/p10_1_schema.json docs/programs/balanced-ternary.adder16.yaml docs/programs/balanced-ternary.adder32.yaml docs/programs/binary.adder32.yaml docs/programs/binary.adder64.yaml docs/programs/damped-driven-oscillator.analyser.yaml docs/programs/differential.yaml docs/programs/exponential-decay.analyser.yaml docs/programs/function-generation.cams.yaml docs/programs/gear-train.yaml docs/programs/harmonic-oscillator.analyser.yaml docs/programs/lorenz.analyser.yaml",
+ "exit_code": 0,
+ "started_utc": "2026-11-04T23:37:07.110Z",
+ "finished_utc": "2026-11-04T23:37:07.628Z",
+ "inputs": {},
+ "outputs": {
+  "reports/results/p10_1_schema.json": "62eefac912e0ad6b316d9272689878eaddea4d8c54f28b0d321230a56b5f12b8",
+  "records/logs/20261104T233707Z_P10.1_schema.log": "400004625656ce1d73474892d8bc034b143ef5392f327b5095b91df6f08cdf30"
+ },
+ "tool_versions": {
+  "node": "v22.23.4"
+ },
+ "image_digests": {},
+ "results": {},
+ "state": "done",
+ "notes": "log: records/logs/20261104T233707Z_P10.1_schema.log"
+}

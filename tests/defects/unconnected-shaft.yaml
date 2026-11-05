@@ -1,0 +1,20 @@
+_notice: "© 1993–2026 Abhishek Choudhary. All rights reserved. AyeAI. SPDX-License-Identifier: CC0-1.0"
+identity: {id: defect.unconnected-shaft, version: 0.1.0, title: "Planted defect: a shaft no element connects"}
+substrate: {id: mechanical, version: 0.1.0}
+kind: continuous
+shafts:
+  - {name: t, unit: rad}
+  - {name: x, unit: rad}
+  - {name: v, unit: rad}
+  - {name: w_v, unit: rad}
+  - {name: spare, unit: rad, description: "the planted defect: declared, connected to nothing"}
+elements:
+  - {kind: crank, name: crank, shaft: t, rate: {value: 1.0, unit: rad/s}}
+  - {kind: integrator, name: i_x, disc: t, integrand: v, output: x, wheel_radius: {value: 0.001, unit: m}, screw_pitch: {value: 0.006283185307179587, unit: m}}
+  - {kind: integrator, name: i_v, disc: t, integrand: x, output: w_v, wheel_radius: {value: 0.001, unit: m}, screw_pitch: {value: 0.006283185307179587, unit: m}}
+  - {kind: gear_pair, name: g_omega2, from: w_v, to: v, teeth: [80, 20], mesh: external}
+initial:
+  - {shaft: x, value: 10.0, unit: rad}
+  - {shaft: v, value: 0.0, unit: rad}
+run: {t0: 0.0, t1: 1.0, unit: s, rk4_step: 0.01}
+provenance: {source: "P10.1 planted defect (T-40)"}

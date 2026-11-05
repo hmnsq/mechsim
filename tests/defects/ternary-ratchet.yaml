@@ -1,0 +1,17 @@
+_notice: "© 1993–2026 Abhishek Choudhary. All rights reserved. AyeAI. SPDX-License-Identifier: CC0-1.0"
+identity: {id: defect.ternary-ratchet, version: 0.1.0, title: "Planted defect: ratchets on a balanced ternary register, which must step backward"}
+substrate: {id: mechanical, version: 0.1.0}
+kind: discrete
+registers:
+  - {name: accumulator, wheels: 16, digits: [-1, 0, 1], role: accumulator}
+  - {name: addend, wheels: 16, digits: [-1, 0, 1], role: setting}
+elements:
+  - {kind: detent_wheels, name: wheels, register: accumulator, detent_positions: 3}
+  - {kind: carry_pawls, name: carries, register: accumulator, overflow: drop}
+  - {kind: setting_levers, name: levers, register: addend, drives: accumulator, sense: add}
+  - {kind: ratchet_pawls, name: ratchets, register: accumulator}
+interface: {encoding: pair, register_bits: 32}
+operation:
+  op: add
+  reference: {repository: hmnsq/repsynth, spec_id: balanced_ternary, symbol: bt_add16, vectors: conformance/vectors/balanced_ternary/add.16.vec}
+provenance: {source: "P10.1 planted defect (T-40)"}

@@ -1,0 +1,40 @@
+$ node tests/p10_1_config.test.mjs
+PASS valid balanced-ternary.adder16.yaml - discrete, hash 07d375228f69
+PASS valid balanced-ternary.adder32.yaml - discrete, hash 1ff83683bfbc
+PASS valid binary.adder32.yaml - discrete, hash 482a22e45d3a
+PASS valid binary.adder64.yaml - discrete, hash 1e20a3223d6a
+PASS valid damped-driven-oscillator.analyser.yaml - continuous, hash ce6aa197fe9b
+     damped-driven-oscillator.analyser.yaml: 16 shafts, 18 elements, 6 states, spanning tree 9 relations, 0 loop closure(s)
+PASS valid differential.yaml - continuous, hash ff67db11d3f6
+     differential.yaml: 4 shafts, 5 elements, 0 states, spanning tree 2 relations, 0 loop closure(s)
+PASS valid exponential-decay.analyser.yaml - continuous, hash ad335a09bb2a
+     exponential-decay.analyser.yaml: 3 shafts, 5 elements, 1 states, spanning tree 1 relations, 0 loop closure(s)
+PASS valid function-generation.cams.yaml - function, hash 05e22170d1e9
+     function-generation.cams.yaml: 8 shafts, 9 elements, 0 states, spanning tree 0 relations, 0 loop closure(s)
+PASS valid gear-train.yaml - continuous, hash bd428193a081
+     gear-train.yaml: 5 shafts, 7 elements, 1 states, spanning tree 3 relations, 0 loop closure(s)
+PASS valid harmonic-oscillator.analyser.yaml - continuous, hash 6dea5b2e4724
+     harmonic-oscillator.analyser.yaml: 4 shafts, 7 elements, 2 states, spanning tree 1 relations, 0 loop closure(s)
+PASS valid lorenz.analyser.yaml - continuous, hash ea639c3fe52c
+     lorenz.analyser.yaml: 32 shafts, 36 elements, 11 states, spanning tree 20 relations, 0 loop closure(s)
+PASS configuration for CMS-03 model balanced-ternary-addition
+PASS configuration for CMS-03 model damped-driven-oscillator
+PASS configuration for CMS-03 model exponential-decay
+PASS configuration for CMS-03 model function-generation
+PASS configuration for CMS-03 model harmonic-oscillator
+PASS configuration for CMS-03 model lorenz
+PASS refused unconnected-shaft.yaml - UNCONNECTED at shafts[4]: shaft 'spare' is not connected to any element
+PASS refused overconstrained-loop.yaml - OVERCONSTRAINED at elements[3]: the relation of 'g_ca' closes a loop that is not consistent: residual 7/8*crank:crank is not zero
+PASS refused algebraic-loop.yaml - UNDETERMINED at shafts[1]: shaft 'c' is not determined: it lies in relations elements[1], elements[2] with more than one undetermined shaft (an algebraic loop without an integrator, or a branch with no driver)
+PASS refused driven-twice.yaml - OVERCONSTRAINED at elements[1]: shaft 'a' is driven by both elements[0] (crank 'crank1') and elements[1] (crank 'crank2')
+PASS refused undeclared-shaft.yaml - REFERENCE at elements[1].to: 'bb' is not a declared shaft
+PASS refused wrong-unit.yaml - UNIT at elements[1].pitch.unit: 'deg' does not have the dimension of 'm'
+PASS refused guessed-parameter.yaml - EVIDENCE at parameters[0].value: a value that is not established is not given (it is never a guess)
+PASS refused velocity-loop.yaml - VELOCITY_LOOP at elements[1]: the speed of 'u' depends on itself through state:i_u -> state:i_w -> state:i_u
+PASS refused missing-initial.yaml - INITIAL at initial: 1 state(s) (w) need 1 initial condition(s); 0 given
+PASS refused ternary-ratchet.yaml - CONNECTION at elements[3].register: a ratchet stops backward steps, which a register with negative digits needs
+PASS accepted control consistent-loop.yaml - closures [{"path":"elements[3]","element":"g_ca","consistent":true,"residual":"0"}]
+PASS every defect file has an expectation
+[p10_1_config] 29/29 checks pass
+
+[exit 0]

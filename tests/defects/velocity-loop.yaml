@@ -1,0 +1,17 @@
+_notice: "© 1993–2026 Abhishek Choudhary. All rights reserved. AyeAI. SPDX-License-Identifier: CC0-1.0"
+identity: {id: defect.velocity-loop, version: 0.1.0, title: "Planted defect: two integrators whose discs turn with each other's wheels"}
+substrate: {id: mechanical, version: 0.1.0}
+kind: continuous
+shafts:
+  - {name: t, unit: rad}
+  - {name: u, unit: rad}
+  - {name: w, unit: rad}
+elements:
+  - {kind: crank, name: crank, shaft: t, rate: {value: 1.0, unit: rad/s}}
+  - {kind: integrator, name: i_u, disc: w, integrand: t, output: u, wheel_radius: {value: 0.001, unit: m}, screw_pitch: {value: 0.006283185307179587, unit: m}}
+  - {kind: integrator, name: i_w, disc: u, integrand: t, output: w, wheel_radius: {value: 0.001, unit: m}, screw_pitch: {value: 0.006283185307179587, unit: m}}
+initial:
+  - {shaft: u, value: 1.0, unit: rad}
+  - {shaft: w, value: 1.0, unit: rad}
+run: {t0: 0.0, t1: 1.0, unit: s, rk4_step: 0.01}
+provenance: {source: "P10.1 planted defect (T-40)"}

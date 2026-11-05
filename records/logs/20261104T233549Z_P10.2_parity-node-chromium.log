@@ -1,0 +1,21 @@
+$ node tests/p10_2_parity.test.mjs
+     node damped-driven-oscillator.analyser.yaml f256673d1ad3bd418150fe496f76a14da8217c787f71934b205a83abcf5d7e09 (1145635 bytes)
+     node differential.yaml c8791f26139b4a01aff465bb0357af291da6c21bb67b92c438a7f0695289abb5 (11764 bytes)
+     node exponential-decay.analyser.yaml 08370c735a4771147e140c880aefa40344709ec2ed5c8baedcb2781cc4b81f12 (89555 bytes)
+     node function-generation.cams.yaml 118a32f5654c45e1750e3f3d4b00f7544369754f71554ea752bf6257d5dd86a8 (20562 bytes)
+     node gear-train.yaml 3cf7359a6ffcd54242d71330854e102a771aa61ceb8a29a3bb4477becd7a29fe (133590 bytes)
+     node harmonic-oscillator.analyser.yaml 66000f7c385dc9a3f9eb46c577a13b171d383a907a9ac2465f4d1b89d5fe279e (223561 bytes)
+     node lorenz.analyser.yaml 845f7871c93668052a85fad6ddbc5ce5b392bcd8e75ca955dcd42d2fd0bb93f4 (3716850 bytes)
+PASS chromium byte-identical trace damped-driven-oscillator.analyser.yaml - f256673d1ad3bd41 vs node f256673d1ad3bd41, 126 ms
+PASS chromium byte-identical trace differential.yaml - c8791f26139b4a01 vs node c8791f26139b4a01, 19 ms
+PASS chromium byte-identical trace exponential-decay.analyser.yaml - 08370c735a477114 vs node 08370c735a477114, 43 ms
+FAIL chromium byte-identical trace function-generation.cams.yaml - d5990c715d3d56d5 vs node 118a32f5654c45e1, 22 ms
+PASS chromium byte-identical trace gear-train.yaml - 3cf7359a6ffcd542 vs node 3cf7359a6ffcd542, 39 ms
+PASS chromium byte-identical trace harmonic-oscillator.analyser.yaml - 66000f7c385dc9a3 vs node 66000f7c385dc9a3, 50 ms
+PASS chromium byte-identical trace lorenz.analyser.yaml - 845f7871c9366805 vs node 845f7871c9366805, 440 ms
+     firefox: not available here (browserType.launch: Executable doesn't exist at /opt/pw-browsers/firefox-1543/firefox/firefox)
+     webkit: not available here (browserType.launch: Executable doesn't exist at /opt/pw-browsers/webkit-2359/pw_run.sh)
+PASS chromium was available and ran
+[p10_2_parity] 7/8 checks pass; FAILED: chromium byte-identical trace function-generation.cams.yaml
+
+[exit 1]

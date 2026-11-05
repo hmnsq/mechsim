@@ -1,0 +1,76 @@
+{
+ "_notice": "© 1993–2026 Abhishek Choudhary. All rights reserved. AyeAI. SPDX-License-Identifier: CC0-1.0",
+ "suite": "transcendental_probe",
+ "checks": 1,
+ "passed": 1,
+ "failed": [],
+ "node": "v22.23.4",
+ "chromium": "153.0.8010.12",
+ "counts": {
+  "sin": {
+   "differ": 35,
+   "of": 1001,
+   "maxRel": 2.205172594570575e-16,
+   "first": {
+    "x": 0.068,
+    "node": 0.21200710992205465,
+    "chromium": 0.21200710992205463
+   }
+  },
+  "exp": {
+   "differ": 109,
+   "of": 1001,
+   "maxRel": 2.0229582457959124e-16,
+   "first": {
+    "x": 0.052,
+    "node": 0.9493288668428896,
+    "chromium": 0.9493288668428895
+   }
+  },
+  "log": {
+   "differ": 84,
+   "of": 1001,
+   "maxRel": 2.211658356084202e-16,
+   "first": {
+    "x": 0.009,
+    "node": 0.008959741371471803,
+    "chromium": 0.008959741371471801
+   }
+  },
+  "tanh": {
+   "differ": 0,
+   "of": 1001,
+   "maxRel": 0,
+   "first": null
+  },
+  "sqrt": {
+   "differ": 0,
+   "of": 1001,
+   "maxRel": 0,
+   "first": null
+  },
+  "pow": {
+   "differ": 0,
+   "of": 1001,
+   "maxRel": 0,
+   "first": null
+  },
+  "cos": {
+   "differ": 42,
+   "of": 1001,
+   "maxRel": 2.012564733531677e-16,
+   "first": {
+    "x": 0.082,
+    "node": 0.9670014877624351,
+    "chromium": 0.967001487762435
+   }
+  }
+ },
+ "details": [
+  {
+   "id": "probe ran in Node.js and Chromium",
+   "ok": true,
+   "note": "node v22.23.4, chromium 153.0.8010.12"
+  }
+ ]
+}

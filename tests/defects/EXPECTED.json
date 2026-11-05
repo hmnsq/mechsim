@@ -1,0 +1,17 @@
+{
+ "_notice": "© 1993–2026 Abhishek Choudhary. All rights reserved. AyeAI. SPDX-License-Identifier: CC0-1.0",
+ "about": "The refusal each planted defect must produce (code and path), checked by tests/p10_1_config.test.mjs. consistent-loop.yaml is a control that must be accepted.",
+ "refusals": {
+  "unconnected-shaft.yaml": {"code": "UNCONNECTED", "path": "shafts[4]"},
+  "overconstrained-loop.yaml": {"code": "OVERCONSTRAINED", "path": "elements[3]"},
+  "algebraic-loop.yaml": {"code": "UNDETERMINED", "path": "shafts[1]"},
+  "driven-twice.yaml": {"code": "OVERCONSTRAINED", "path": "elements[1]"},
+  "undeclared-shaft.yaml": {"code": "REFERENCE", "path": "elements[1].to"},
+  "wrong-unit.yaml": {"code": "UNIT", "path": "elements[1].pitch.unit"},
+  "guessed-parameter.yaml": {"code": "EVIDENCE", "path": "parameters[0].value"},
+  "velocity-loop.yaml": {"code": "VELOCITY_LOOP", "path": "elements[1]"},
+  "missing-initial.yaml": {"code": "INITIAL", "path": "initial"},
+  "ternary-ratchet.yaml": {"code": "CONNECTION", "path": "elements[3].register"}
+ },
+ "accepted": ["consistent-loop.yaml"]
+}

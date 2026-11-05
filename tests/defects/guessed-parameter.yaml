@@ -1,0 +1,14 @@
+_notice: "© 1993–2026 Abhishek Choudhary. All rights reserved. AyeAI. SPDX-License-Identifier: CC0-1.0"
+identity: {id: defect.guessed-parameter, version: 0.1.0, title: "Planted defect: a parameter that is not established but carries a value"}
+substrate: {id: mechanical, version: 0.1.0}
+kind: continuous
+shafts:
+  - {name: a, unit: rad}
+  - {name: b, unit: rad}
+elements:
+  - {kind: crank, name: crank, shaft: a, rate: {value: 1.0, unit: rad/s}}
+  - {kind: gear_pair, name: g, from: a, to: b, teeth: [20, 40], mesh: external}
+parameters:
+  - {name: integrator_slip_torque, value: 0.01, unit: N.m, evidence: {state: not_established, reason: "not measured"}}
+run: {t0: 0.0, t1: 1.0, unit: s, points: 10}
+provenance: {source: "P10.1 planted defect (T-40)"}

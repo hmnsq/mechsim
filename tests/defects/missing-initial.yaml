@@ -1,0 +1,14 @@
+_notice: "© 1993–2026 Abhishek Choudhary. All rights reserved. AyeAI. SPDX-License-Identifier: CC0-1.0"
+identity: {id: defect.missing-initial, version: 0.1.0, title: "Planted defect: an integrator without its initial condition"}
+substrate: {id: mechanical, version: 0.1.0}
+kind: continuous
+shafts:
+  - {name: t, unit: rad}
+  - {name: w, unit: rad}
+  - {name: x, unit: rad}
+elements:
+  - {kind: crank, name: crank, shaft: t, rate: {value: 1.0, unit: rad/s}}
+  - {kind: integrator, name: i_x, disc: t, integrand: x, output: w, wheel_radius: {value: 0.001, unit: m}, screw_pitch: {value: 0.006283185307179587, unit: m}}
+  - {kind: gear_pair, name: g_k, from: w, to: x, teeth: [20, 40], mesh: external}
+run: {t0: 0.0, t1: 1.0, unit: s, rk4_step: 0.01}
+provenance: {source: "P10.1 planted defect (T-40)"}

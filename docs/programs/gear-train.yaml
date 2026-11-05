@@ -1,0 +1,42 @@
+_notice: "© 1993–2026 Abhishek Choudhary. All rights reserved. AyeAI. SPDX-License-Identifier: CC0-1.0"
+identity:
+  id: gear-train
+  version: 0.1.0
+  title: Three-stage gear train with a counter wheel and a ratchet
+  description: >-
+    A crank turns s0; two external pairs (20:60, 15:45) and a belt (12:30) give s3 = (2/45) s0 exactly. A counter
+    wheel with ten positions reads s0; a forward ratchet takes s3 to r. Used for T-41, the lumped model (P10.4),
+    the Modelica generator (P10.7) and the Chrono script (P10.8).
+substrate: {id: mechanical, version: 0.1.0}
+kind: continuous
+shafts:
+  - {name: s0, unit: rad, description: "input"}
+  - {name: s1, unit: rad}
+  - {name: s2, unit: rad}
+  - {name: s3, unit: rad, description: "output"}
+  - {name: r, unit: rad, description: "ratchet output"}
+elements:
+  - {kind: crank, name: crank, shaft: s0, rate: {value: 1.0, unit: rad/s}}
+  - {kind: gear_pair, name: g1, from: s0, to: s1, teeth: [20, 60], mesh: external, module: {value: 1.0, unit: mm}}
+  - {kind: gear_pair, name: g2, from: s1, to: s2, teeth: [15, 45], mesh: external, module: {value: 1.0, unit: mm}}
+  - {kind: gear_pair, name: g3, from: s2, to: s3, teeth: [12, 30], mesh: belt}
+  - {kind: counter_wheel, name: count_s0, shaft: s0, positions: 10}
+  - {kind: ratchet, name: ratchet, input: s3, output: r, direction: forward}
+  - {kind: dial, name: dial_s3, shaft: s3}
+initial:
+  - {shaft: r, value: 0.0, unit: rad}
+scales:
+  - {variable: t, shaft: s0, factor: {value: 1.0, unit: rad/s}, model_unit: s}
+parameters:
+  - {name: gear_module, value: 1.0, unit: mm, applies_to: [g1, g2], evidence: {state: sourced, citation: "subcore spec/substrates/mechanical.yaml, gear_module (an assumed working value there)"}}
+  - {name: pressure_angle, value: 20.0, unit: deg, applies_to: [g1, g2], evidence: {state: sourced, citation: "Implementation Guidelines 8.4, working value 20 degrees"}}
+  - {name: shaft_inertia, value: 1.0e-5, unit: kg.m2, applies_to: [lumped], evidence: {state: assumed, assumption: "a printed spur gear of module 1 mm and 20 to 60 teeth on a 6 mm shaft"}}
+  - {name: output_inertia, value: 4.0e-5, unit: kg.m2, applies_to: [lumped], evidence: {state: assumed, assumption: "the output gear and its dial"}}
+  - {name: mesh_stiffness, value: 50.0, unit: N.m/rad, applies_to: [lumped], evidence: {state: assumed, assumption: "torsional stiffness of a printed mesh referred to the driven shaft"}}
+  - {name: mesh_damping, value: 0.002, unit: N.m.s/rad, applies_to: [lumped], evidence: {state: assumed, assumption: "mesh damping chosen for a damping ratio near 0.1"}}
+  - {name: gear_backlash, value: 0.0017453292519943296, unit: rad, applies_to: [lumped], evidence: {state: assumed, assumption: "0.1 degree of total free play at the driven shaft"}}
+  - {name: output_viscous, value: 1.0e-4, unit: N.m.s/rad, applies_to: [lumped], evidence: {state: assumed, assumption: "bearing loss of the output shaft"}}
+  - {name: output_coulomb, value: 0.002, unit: N.m, applies_to: [lumped], evidence: {state: assumed, assumption: "Coulomb friction of the output shaft that holds it still while the mesh is open"}}
+  - {name: shaft_viscous_loss, unit: N.m.s/rad, applies_to: [s1, s2], evidence: {state: not_established, reason: "not measured (subcore mechanical substrate); the lumped run sets it to zero and says so"}}
+run: {t0: 0.0, t1: 10.0, unit: s, rk4_step: 0.01, rtol: 1.0e-10, atol: 1.0e-12}
+provenance: {source: "P10.1, P10.2 (T-41), P10.4, P10.7, P10.8"}

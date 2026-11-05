@@ -1,0 +1,27 @@
+_notice: "© 1993–2026 Abhishek Choudhary. All rights reserved. AyeAI. SPDX-License-Identifier: CC0-1.0"
+identity:
+  id: balanced-ternary.adder16
+  version: 0.1.0
+  title: Mechanical balanced ternary adder, 16 trits
+  description: >-
+    An accumulator of 16 detent wheels with 3 positions each ([-1, 0, 1]), joined by carry pawls; setting levers turn
+    each wheel by the digit of the second word, one detent step at a time, while the carries ripple. The carry
+    out of the last wheel leaves the register (wrap modulo the register).
+substrate: {id: mechanical, version: 0.1.0}
+model: {id: balanced-ternary-addition, version: 1.0.0}
+kind: discrete
+registers:
+  - {name: accumulator, wheels: 16, digits: [-1, 0, 1], role: accumulator}
+  - {name: addend, wheels: 16, digits: [-1, 0, 1], role: setting}
+elements:
+  - {kind: detent_wheels, name: wheels, register: accumulator, detent_positions: 3}
+  - {kind: carry_pawls, name: carries, register: accumulator, overflow: drop}
+  - {kind: setting_levers, name: levers, register: addend, drives: accumulator, sense: add}
+interface:
+  encoding: pair
+  register_bits: 32
+  invalid_word: "all ones: a code 11 names no detent position, so the levers jam (the representation returns the all-ones word for an invalid input)"
+operation:
+  op: add
+  reference: {repository: hmnsq/repsynth, spec_id: balanced_ternary, symbol: bt_add16, header: spec/ref/balanced_ternary/balanced_ternary.h, vectors: conformance/vectors/balanced_ternary/add.16.vec}
+provenance: {source: "P10.3 (MEC-03); Guidelines 8.3; reference function bt_add16 of balanced_ternary 0.3.0 (SPC-03)"}

@@ -1,0 +1,13 @@
+_notice: "© 1993–2026 Abhishek Choudhary. All rights reserved. AyeAI. SPDX-License-Identifier: CC0-1.0"
+identity: {id: defect.driven-twice, version: 0.1.0, title: "Planted defect: two cranks on one shaft"}
+substrate: {id: mechanical, version: 0.1.0}
+kind: continuous
+shafts:
+  - {name: a, unit: rad}
+  - {name: b, unit: rad}
+elements:
+  - {kind: crank, name: crank1, shaft: a, rate: {value: 1.0, unit: rad/s}}
+  - {kind: crank, name: crank2, shaft: a, rate: {value: 2.0, unit: rad/s}}
+  - {kind: gear_pair, name: g, from: a, to: b, teeth: [20, 40], mesh: external}
+run: {t0: 0.0, t1: 1.0, unit: s, points: 10}
+provenance: {source: "P10.1 planted defect (T-40)"}

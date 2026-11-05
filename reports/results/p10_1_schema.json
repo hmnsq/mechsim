@@ -1,0 +1,17 @@
+{
+ "_notice": "© 1993–2026 Abhishek Choudhary. All rights reserved. AyeAI. SPDX-License-Identifier: CC0-1.0",
+ "schema": "spec/schema/mechanism.schema.json",
+ "files": {
+  "docs/programs/balanced-ternary.adder16.yaml": [],
+  "docs/programs/balanced-ternary.adder32.yaml": [],
+  "docs/programs/binary.adder32.yaml": [],
+  "docs/programs/binary.adder64.yaml": [],
+  "docs/programs/damped-driven-oscillator.analyser.yaml": [],
+  "docs/programs/differential.yaml": [],
+  "docs/programs/exponential-decay.analyser.yaml": [],
+  "docs/programs/function-generation.cams.yaml": [],
+  "docs/programs/gear-train.yaml": [],
+  "docs/programs/harmonic-oscillator.analyser.yaml": [],
+  "docs/programs/lorenz.analyser.yaml": []
+ }
+}

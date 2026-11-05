@@ -1,0 +1,224 @@
+{
+ "_notice": "© 1993–2026 Abhishek Choudhary. All rights reserved. AyeAI. SPDX-License-Identifier: CC0-1.0",
+ "suite": "p10_1_config",
+ "checks": 29,
+ "passed": 29,
+ "failed": [],
+ "programs": 11,
+ "defects": 10,
+ "details": [
+  {
+   "id": "valid balanced-ternary.adder16.yaml",
+   "ok": true,
+   "note": "discrete, hash 07d375228f69"
+  },
+  {
+   "id": "valid balanced-ternary.adder32.yaml",
+   "ok": true,
+   "note": "discrete, hash 1ff83683bfbc"
+  },
+  {
+   "id": "valid binary.adder32.yaml",
+   "ok": true,
+   "note": "discrete, hash 482a22e45d3a"
+  },
+  {
+   "id": "valid binary.adder64.yaml",
+   "ok": true,
+   "note": "discrete, hash 1e20a3223d6a"
+  },
+  {
+   "id": "valid damped-driven-oscillator.analyser.yaml",
+   "ok": true,
+   "note": "continuous, hash ce6aa197fe9b"
+  },
+  {
+   "id": "valid differential.yaml",
+   "ok": true,
+   "note": "continuous, hash ff67db11d3f6"
+  },
+  {
+   "id": "valid exponential-decay.analyser.yaml",
+   "ok": true,
+   "note": "continuous, hash ad335a09bb2a"
+  },
+  {
+   "id": "valid function-generation.cams.yaml",
+   "ok": true,
+   "note": "function, hash 05e22170d1e9"
+  },
+  {
+   "id": "valid gear-train.yaml",
+   "ok": true,
+   "note": "continuous, hash bd428193a081"
+  },
+  {
+   "id": "valid harmonic-oscillator.analyser.yaml",
+   "ok": true,
+   "note": "continuous, hash 6dea5b2e4724"
+  },
+  {
+   "id": "valid lorenz.analyser.yaml",
+   "ok": true,
+   "note": "continuous, hash ea639c3fe52c"
+  },
+  {
+   "id": "configuration for CMS-03 model balanced-ternary-addition",
+   "ok": true
+  },
+  {
+   "id": "configuration for CMS-03 model damped-driven-oscillator",
+   "ok": true
+  },
+  {
+   "id": "configuration for CMS-03 model exponential-decay",
+   "ok": true
+  },
+  {
+   "id": "configuration for CMS-03 model function-generation",
+   "ok": true
+  },
+  {
+   "id": "configuration for CMS-03 model harmonic-oscillator",
+   "ok": true
+  },
+  {
+   "id": "configuration for CMS-03 model lorenz",
+   "ok": true
+  },
+  {
+   "id": "refused unconnected-shaft.yaml",
+   "ok": true,
+   "note": "UNCONNECTED at shafts[4]: shaft 'spare' is not connected to any element",
+   "errors": [
+    {
+     "code": "UNCONNECTED",
+     "path": "shafts[4]",
+     "message": "shaft 'spare' is not connected to any element"
+    }
+   ]
+  },
+  {
+   "id": "refused overconstrained-loop.yaml",
+   "ok": true,
+   "note": "OVERCONSTRAINED at elements[3]: the relation of 'g_ca' closes a loop that is not consistent: residual 7/8*crank:crank is not zero",
+   "errors": [
+    {
+     "code": "OVERCONSTRAINED",
+     "path": "elements[3]",
+     "message": "the relation of 'g_ca' closes a loop that is not consistent: residual 7/8*crank:crank is not zero"
+    }
+   ]
+  },
+  {
+   "id": "refused algebraic-loop.yaml",
+   "ok": true,
+   "note": "UNDETERMINED at shafts[1]: shaft 'c' is not determined: it lies in relations elements[1], elements[2] with more than one undetermined shaft (an algebraic loop without an integrator, or a branch with no driver)",
+   "errors": [
+    {
+     "code": "UNDETERMINED",
+     "path": "shafts[1]",
+     "message": "shaft 'c' is not determined: it lies in relations elements[1], elements[2] with more than one undetermined shaft (an algebraic loop without an integrator, or a branch with no driver)"
+    },
+    {
+     "code": "UNDETERMINED",
+     "path": "shafts[2]",
+     "message": "shaft 'd' is not determined: it lies in relations elements[1], elements[2] with more than one undetermined shaft (an algebraic loop without an integrator, or a branch with no driver)"
+    }
+   ]
+  },
+  {
+   "id": "refused driven-twice.yaml",
+   "ok": true,
+   "note": "OVERCONSTRAINED at elements[1]: shaft 'a' is driven by both elements[0] (crank 'crank1') and elements[1] (crank 'crank2')",
+   "errors": [
+    {
+     "code": "OVERCONSTRAINED",
+     "path": "elements[1]",
+     "message": "shaft 'a' is driven by both elements[0] (crank 'crank1') and elements[1] (crank 'crank2')"
+    }
+   ]
+  },
+  {
+   "id": "refused undeclared-shaft.yaml",
+   "ok": true,
+   "note": "REFERENCE at elements[1].to: 'bb' is not a declared shaft",
+   "errors": [
+    {
+     "code": "REFERENCE",
+     "path": "elements[1].to",
+     "message": "'bb' is not a declared shaft"
+    }
+   ]
+  },
+  {
+   "id": "refused wrong-unit.yaml",
+   "ok": true,
+   "note": "UNIT at elements[1].pitch.unit: 'deg' does not have the dimension of 'm'",
+   "errors": [
+    {
+     "code": "UNIT",
+     "path": "elements[1].pitch.unit",
+     "message": "'deg' does not have the dimension of 'm'"
+    }
+   ]
+  },
+  {
+   "id": "refused guessed-parameter.yaml",
+   "ok": true,
+   "note": "EVIDENCE at parameters[0].value: a value that is not established is not given (it is never a guess)",
+   "errors": [
+    {
+     "code": "EVIDENCE",
+     "path": "parameters[0].value",
+     "message": "a value that is not established is not given (it is never a guess)"
+    }
+   ]
+  },
+  {
+   "id": "refused velocity-loop.yaml",
+   "ok": true,
+   "note": "VELOCITY_LOOP at elements[1]: the speed of 'u' depends on itself through state:i_u -> state:i_w -> state:i_u",
+   "errors": [
+    {
+     "code": "VELOCITY_LOOP",
+     "path": "elements[1]",
+     "message": "the speed of 'u' depends on itself through state:i_u -> state:i_w -> state:i_u"
+    }
+   ]
+  },
+  {
+   "id": "refused missing-initial.yaml",
+   "ok": true,
+   "note": "INITIAL at initial: 1 state(s) (w) need 1 initial condition(s); 0 given",
+   "errors": [
+    {
+     "code": "INITIAL",
+     "path": "initial",
+     "message": "1 state(s) (w) need 1 initial condition(s); 0 given"
+    }
+   ]
+  },
+  {
+   "id": "refused ternary-ratchet.yaml",
+   "ok": true,
+   "note": "CONNECTION at elements[3].register: a ratchet stops backward steps, which a register with negative digits needs",
+   "errors": [
+    {
+     "code": "CONNECTION",
+     "path": "elements[3].register",
+     "message": "a ratchet stops backward steps, which a register with negative digits needs"
+    }
+   ]
+  },
+  {
+   "id": "accepted control consistent-loop.yaml",
+   "ok": true,
+   "note": "closures [{\"path\":\"elements[3]\",\"element\":\"g_ca\",\"consistent\":true,\"residual\":\"0\"}]"
+  },
+  {
+   "id": "every defect file has an expectation",
+   "ok": true
+  }
+ ]
+}

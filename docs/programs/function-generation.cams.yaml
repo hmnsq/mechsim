@@ -1,0 +1,45 @@
+_notice: "© 1993–2026 Abhishek Choudhary. All rights reserved. AyeAI. SPDX-License-Identifier: CC0-1.0"
+identity:
+  id: function-generation.cams
+  version: 0.1.0
+  title: Function generation with cams
+  description: >-
+    Seven cams on one shaft turned by the crank from x = 0 to x = 1 (1 rad per unit of x). Each follower rises
+    by 10 mm per unit of its function. Each cam is cut from a table of its function at 1001 points, evaluated by
+    mpmath and rounded to binary64 (tools/camtables.py), and interpolated with continuous slope.
+substrate: {id: mechanical, version: 0.1.0}
+model: {id: function-generation, version: 1.0.0, path: docs/vendor/subcore/0.1.0/spec/models/function-generation.yaml}
+kind: function
+shafts:
+  - {name: x, unit: rad, description: "cam shaft, 1 rad per unit of x"}
+  - {name: y_sin, unit: m}
+  - {name: y_exp, unit: m}
+  - {name: y_square, unit: m}
+  - {name: y_sqrt, unit: m}
+  - {name: y_log, unit: m}
+  - {name: y_tanh, unit: m}
+  - {name: y_abs, unit: m}
+elements:
+  - {kind: crank, name: crank, shaft: x, rate: {value: 1.0, unit: rad/s}}
+  - {kind: cam, name: cam_sin, shaft: x, follower: y_sin, input_scale: {value: 1.0, unit: rad}, output_scale: {value: 0.01, unit: m}, table: {vectors: tables/function-generation.f_sin.1001.vec, from: 0.0, to: 1.0}}
+  - {kind: cam, name: cam_exp, shaft: x, follower: y_exp, input_scale: {value: 1.0, unit: rad}, output_scale: {value: 0.01, unit: m}, table: {vectors: tables/function-generation.f_exp.1001.vec, from: 0.0, to: 1.0}}
+  - {kind: cam, name: cam_square, shaft: x, follower: y_square, input_scale: {value: 1.0, unit: rad}, output_scale: {value: 0.01, unit: m}, table: {vectors: tables/function-generation.f_square.1001.vec, from: 0.0, to: 1.0}}
+  - {kind: cam, name: cam_sqrt, shaft: x, follower: y_sqrt, input_scale: {value: 1.0, unit: rad}, output_scale: {value: 0.01, unit: m}, table: {vectors: tables/function-generation.f_sqrt.1001.vec, from: 0.0, to: 1.0}}
+  - {kind: cam, name: cam_log, shaft: x, follower: y_log, input_scale: {value: 1.0, unit: rad}, output_scale: {value: 0.01, unit: m}, table: {vectors: tables/function-generation.f_log.1001.vec, from: 0.0, to: 1.0}}
+  - {kind: cam, name: cam_tanh, shaft: x, follower: y_tanh, input_scale: {value: 1.0, unit: rad}, output_scale: {value: 0.01, unit: m}, table: {vectors: tables/function-generation.f_tanh.1001.vec, from: 0.0, to: 1.0}}
+  - {kind: cam, name: cam_abs, shaft: x, follower: y_abs, input_scale: {value: 1.0, unit: rad}, output_scale: {value: 0.01, unit: m}, table: {vectors: tables/function-generation.f_abs.1001.vec, from: 0.0, to: 1.0}}
+  - {kind: plotter, name: plot, x: x, y: y_sin}
+scales:
+  - {variable: x, shaft: x, factor: {value: 1.0, unit: rad}, model_unit: "1"}
+  - {variable: f_sin, shaft: y_sin, factor: {value: 0.01, unit: m}, model_unit: "1"}
+  - {variable: f_exp, shaft: y_exp, factor: {value: 0.01, unit: m}, model_unit: "1"}
+  - {variable: f_square, shaft: y_square, factor: {value: 0.01, unit: m}, model_unit: "1"}
+  - {variable: f_sqrt, shaft: y_sqrt, factor: {value: 0.01, unit: m}, model_unit: "1"}
+  - {variable: f_log, shaft: y_log, factor: {value: 0.01, unit: m}, model_unit: "1"}
+  - {variable: f_tanh, shaft: y_tanh, factor: {value: 0.01, unit: m}, model_unit: "1"}
+  - {variable: f_abs, shaft: y_abs, factor: {value: 0.01, unit: m}, model_unit: "1"}
+parameters:
+  - {name: follower_scale, value: 0.01, unit: m, applies_to: [cams], evidence: {state: assumed, assumption: "10 mm of follower lift per unit of the function"}}
+  - {name: table_points, value: 1001, unit: "1", applies_to: [cams], evidence: {state: assumed, assumption: "profile tabulated at 1001 points; interpolation error is reported per function"}}
+run: {t0: 0.0, t1: 1.0, unit: s, points: 100}
+provenance: {source: "P10.1, P10.9; model function-generation 1.0.0 (CMS-03); Guidelines 8.1 (cams from tables with C1 interpolation)"}

@@ -1,0 +1,111 @@
+_notice: "© 1993–2026 Abhishek Choudhary. All rights reserved. AyeAI. SPDX-License-Identifier: CC0-1.0"
+identity:
+  id: lorenz.analyser
+  version: 0.1.0
+  title: Lorenz system on a differential analyser
+  description: >-
+    x, y and z at 1 rad per unit. The products x z and x y are made mechanically, as on Bush's analyser, from
+    d(x z) = x dz + z dx: two integrators whose discs turn with the z and x shafts, summed by a differential;
+    they are carried at 0.05 rad per unit (p and q) so that every integrand stays within the carriage travel.
+    sigma = 10, rho = 28 (a two-stage train 7:1 then 4:1) and beta = 8/3 are gear ratios.
+substrate: {id: mechanical, version: 0.1.0}
+model: {id: lorenz, version: 1.0.0, path: docs/vendor/subcore/0.1.0/spec/models/lorenz.yaml}
+kind: continuous
+shafts:
+  - {name: t, unit: rad, description: "time"}
+  - {name: x, unit: rad}
+  - {name: y, unit: rad}
+  - {name: z, unit: rad}
+  - {name: p, unit: rad, description: "0.05 x z"}
+  - {name: q, unit: rad, description: "0.05 x y"}
+  - {name: w_xy, unit: rad, description: "integral of y dt"}
+  - {name: w_xx, unit: rad, description: "integral of x dt"}
+  - {name: w_yx, unit: rad, description: "integral of x dt"}
+  - {name: w_yp, unit: rad, description: "integral of p dt"}
+  - {name: w_yy, unit: rad, description: "integral of y dt"}
+  - {name: w_zq, unit: rad, description: "integral of q dt"}
+  - {name: w_zz, unit: rad, description: "integral of z dt"}
+  - {name: w_pa, unit: rad, description: "integral of x dz"}
+  - {name: w_pb, unit: rad, description: "integral of z dx"}
+  - {name: w_qa, unit: rad, description: "integral of x dy"}
+  - {name: w_qb, unit: rad, description: "integral of y dx"}
+  - {name: xa, unit: rad}
+  - {name: xb, unit: rad}
+  - {name: xm, unit: rad}
+  - {name: ya1, unit: rad}
+  - {name: ya, unit: rad}
+  - {name: yb, unit: rad}
+  - {name: yc, unit: rad}
+  - {name: ym1, unit: rad}
+  - {name: yg, unit: rad}
+  - {name: ym2, unit: rad}
+  - {name: za, unit: rad}
+  - {name: zb, unit: rad}
+  - {name: zm, unit: rad}
+  - {name: pm, unit: rad}
+  - {name: qm, unit: rad}
+elements:
+  - {kind: crank, name: crank, shaft: t, rate: {value: 1.0, unit: rad/s}}
+  # dx = sigma (y - x) dt
+  - {kind: integrator, name: i_xy, disc: t, integrand: y, output: w_xy, wheel_radius: {value: 0.001, unit: m}, screw_pitch: {value: 0.006283185307179587, unit: m}, travel: {value: 0.1, unit: m}}
+  - {kind: integrator, name: i_xx, disc: t, integrand: x, output: w_xx, wheel_radius: {value: 0.001, unit: m}, screw_pitch: {value: 0.006283185307179587, unit: m}, travel: {value: 0.1, unit: m}}
+  - {kind: gear_pair, name: g_xa, from: w_xy, to: xa, teeth: [100, 10], mesh: internal, note: "+sigma"}
+  - {kind: gear_pair, name: g_xb, from: w_xx, to: xb, teeth: [100, 10], mesh: external, note: "-sigma"}
+  - {kind: differential, name: d_x, a: xa, b: xb, carrier: xm}
+  - {kind: gear_pair, name: g_x, from: xm, to: x, teeth: [40, 20], mesh: internal}
+  # dy = (rho x - x z - y) dt
+  - {kind: integrator, name: i_yx, disc: t, integrand: x, output: w_yx, wheel_radius: {value: 0.001, unit: m}, screw_pitch: {value: 0.006283185307179587, unit: m}, travel: {value: 0.1, unit: m}}
+  - {kind: integrator, name: i_yp, disc: t, integrand: p, output: w_yp, wheel_radius: {value: 0.001, unit: m}, screw_pitch: {value: 0.006283185307179587, unit: m}, travel: {value: 0.1, unit: m}}
+  - {kind: integrator, name: i_yy, disc: t, integrand: y, output: w_yy, wheel_radius: {value: 0.001, unit: m}, screw_pitch: {value: 0.006283185307179587, unit: m}, travel: {value: 0.1, unit: m}}
+  - {kind: gear_pair, name: g_ya1, from: w_yx, to: ya1, teeth: [70, 10], mesh: internal, note: "7, first stage of rho"}
+  - {kind: gear_pair, name: g_ya2, from: ya1, to: ya, teeth: [40, 10], mesh: internal, note: "4, second stage of rho"}
+  - {kind: gear_pair, name: g_yb, from: w_yp, to: yb, teeth: [100, 5], mesh: external, note: "-1/0.05"}
+  - {kind: gear_pair, name: g_yc, from: w_yy, to: yc, teeth: [30, 30], mesh: external}
+  - {kind: differential, name: d_y1, a: ya, b: yb, carrier: ym1}
+  - {kind: gear_pair, name: g_y1, from: ym1, to: yg, teeth: [40, 20], mesh: internal}
+  - {kind: differential, name: d_y2, a: yg, b: yc, carrier: ym2}
+  - {kind: gear_pair, name: g_y, from: ym2, to: y, teeth: [40, 20], mesh: internal}
+  # dz = (x y - beta z) dt
+  - {kind: integrator, name: i_zq, disc: t, integrand: q, output: w_zq, wheel_radius: {value: 0.001, unit: m}, screw_pitch: {value: 0.006283185307179587, unit: m}, travel: {value: 0.1, unit: m}}
+  - {kind: integrator, name: i_zz, disc: t, integrand: z, output: w_zz, wheel_radius: {value: 0.001, unit: m}, screw_pitch: {value: 0.006283185307179587, unit: m}, travel: {value: 0.1, unit: m}}
+  - {kind: gear_pair, name: g_za, from: w_zq, to: za, teeth: [100, 5], mesh: internal, note: "1/0.05"}
+  - {kind: gear_pair, name: g_zb, from: w_zz, to: zb, teeth: [80, 30], mesh: external, note: "-beta = -8/3"}
+  - {kind: differential, name: d_z, a: za, b: zb, carrier: zm}
+  - {kind: gear_pair, name: g_z, from: zm, to: z, teeth: [40, 20], mesh: internal}
+  # p = 0.05 x z and q = 0.05 x y, by integration by parts
+  - {kind: integrator, name: i_pa, disc: z, integrand: x, output: w_pa, wheel_radius: {value: 0.001, unit: m}, screw_pitch: {value: 0.006283185307179587, unit: m}, travel: {value: 0.1, unit: m}}
+  - {kind: integrator, name: i_pb, disc: x, integrand: z, output: w_pb, wheel_radius: {value: 0.001, unit: m}, screw_pitch: {value: 0.006283185307179587, unit: m}, travel: {value: 0.1, unit: m}}
+  - {kind: differential, name: d_p, a: w_pa, b: w_pb, carrier: pm}
+  - {kind: gear_pair, name: g_p, from: pm, to: p, teeth: [10, 100], mesh: internal, note: "2 x 0.05"}
+  - {kind: integrator, name: i_qa, disc: y, integrand: x, output: w_qa, wheel_radius: {value: 0.001, unit: m}, screw_pitch: {value: 0.006283185307179587, unit: m}, travel: {value: 0.1, unit: m}}
+  - {kind: integrator, name: i_qb, disc: x, integrand: y, output: w_qb, wheel_radius: {value: 0.001, unit: m}, screw_pitch: {value: 0.006283185307179587, unit: m}, travel: {value: 0.1, unit: m}}
+  - {kind: differential, name: d_q, a: w_qa, b: w_qb, carrier: qm}
+  - {kind: gear_pair, name: g_q, from: qm, to: q, teeth: [10, 100], mesh: internal, note: "2 x 0.05"}
+  - {kind: dial, name: dial_x, shaft: x}
+  - {kind: dial, name: dial_y, shaft: y}
+  - {kind: dial, name: dial_z, shaft: z}
+  - {kind: plotter, name: plot_xz, x: x, y: z}
+initial:
+  - {shaft: w_xy, value: 0.1, unit: rad, note: "x_0 = 10 w_xy - 10 w_xx = 1"}
+  - {shaft: w_xx, value: 0.0, unit: rad}
+  - {shaft: w_yx, value: 0.0, unit: rad}
+  - {shaft: w_yp, value: 0.0, unit: rad}
+  - {shaft: w_yy, value: -1.0, unit: rad, note: "y_0 = 28 w_yx - 20 w_yp - w_yy = 1"}
+  - {shaft: w_zq, value: 0.05, unit: rad, note: "z_0 = 20 w_zq - (8/3) w_zz = 1"}
+  - {shaft: w_zz, value: 0.0, unit: rad}
+  - {shaft: w_pa, value: 1.0, unit: rad, note: "p_0 = 0.05 (w_pa + w_pb) = 0.05 x_0 z_0"}
+  - {shaft: w_pb, value: 0.0, unit: rad}
+  - {shaft: w_qa, value: 1.0, unit: rad, note: "q_0 = 0.05 x_0 y_0"}
+  - {shaft: w_qb, value: 0.0, unit: rad}
+scales:
+  - {variable: t, shaft: t, factor: {value: 1.0, unit: rad/s}, model_unit: s}
+  - {variable: x, shaft: x, factor: {value: 1.0, unit: rad}, model_unit: "1"}
+  - {variable: y, shaft: y, factor: {value: 1.0, unit: rad}, model_unit: "1"}
+  - {variable: z, shaft: z, factor: {value: 1.0, unit: rad}, model_unit: "1"}
+parameters:
+  - {name: wheel_radius, value: 0.001, unit: m, applies_to: [integrators], evidence: {state: assumed, assumption: "working size of an integrator wheel, chosen with the screw pitch so that r / R_w equals the integrand shaft angle in radians"}}
+  - {name: screw_pitch, value: 0.006283185307179587, unit: m, applies_to: [integrators], evidence: {state: assumed, assumption: "2 pi R_w, so that one turn of the integrand shaft moves the wheel by 2 pi R_w"}}
+  - {name: carriage_travel, value: 0.1, unit: m, applies_to: [integrators], evidence: {state: sourced, citation: "subcore spec/substrates/mechanical.yaml, parameter carriage_travel (an assumed working value there); read here as total travel centred on the disc"}}
+  - {name: crank_rate, value: 1.0, unit: rad/s, applies_to: [crank], evidence: {state: assumed, assumption: "machine time scale: one radian of crank per second of model time; any rate below the slip and resonance limits gives the same ideal result"}}
+run: {t0: 0.0, t1: 5.0, unit: s, rk4_step: 0.001, rtol: 1.0e-12, atol: 1.0e-12}
+provenance: {source: "P10.1, P10.9; model lorenz 1.0.0 (CMS-03); Bush, J. Franklin Inst. 212 (1931) 447-488 for products by integration", evidence: "beta is the gear ratio 8/3; the model uses 8/3 rounded to binary64, a relative difference below 1.2e-16"}
