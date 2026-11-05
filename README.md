@@ -5,4 +5,4 @@ geometry is licensed separately as recorded by decision RD6.
 
 Version 0.1.0. Source checkpoint: `files/mechsim_FINAL_20261104T2339Z.zip`.
 
-DOI: __MECHSIM_DOI__
+DOI: 10.5281/zenodo.23966355
